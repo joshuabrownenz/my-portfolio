@@ -1,6 +1,8 @@
+import { CreateWebpackConfigArgs } from "gatsby";
 import * as path from "path"
+import fs from "fs"
 
-export const onCreateWebpackConfig = ({ actions }) => {
+export const onCreateWebpackConfig = ({ actions }: CreateWebpackConfigArgs) => {
   actions.setWebpackConfig({
     resolve: {
       alias: {
@@ -9,4 +11,10 @@ export const onCreateWebpackConfig = ({ actions }) => {
       },
     },
   })
+}
+
+export const onPreBuild = () => {
+  if (!fs.existsSync("./static/resume.pdf")) {
+    throw new Error("No resume.pdf found in static folder.")
+  }
 }
