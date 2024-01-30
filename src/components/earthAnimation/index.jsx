@@ -1,7 +1,14 @@
 import React, { Suspense, useMemo, useRef, useState } from "react";
-import { Canvas, ThreeElements, useFrame, useLoader } from "react-three-fiber";
+import {
+  Canvas,
+  ThreeElements,
+  useFrame,
+  useLoader,
+  useThree,
+} from "react-three-fiber";
 import {
   BufferAttribute,
+  Vector2,
   Vector3,
   Matrix4,
   PerspectiveCamera,
@@ -14,8 +21,9 @@ const SCALE = 2;
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
+  const { camera, size } = useThree();
   const bufferRef = useRef();
-  const cameraRef = useRef();
+  const canvasRef = useRef();
 
   const velocitiesRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
@@ -79,12 +87,12 @@ const EarthPointCloud = () => {
       const bumpValue = imageData.data[colorIndex]; // Assuming a grayscale bump map
 
       // Set the color and elevation for land and ocean
-      let color = new Color(0x00ff00); // Green for land
+      let color = new Color(0x6f9b59); // Green for land
       let landElevation = 1.05; // Slightly elevated for land
       if (bumpValue > 0) {
         // If the bump map value indicates ocean
         landElevation = 1;
-        color = new Color(0x0000ff); // Blue for ocean
+        color = new Color(0x2d467f); // Blue for ocean
       }
 
       // Calculate the final position of the particle
@@ -99,13 +107,61 @@ const EarthPointCloud = () => {
       colors[i * 3 + 2] = color.b;
     }
 
-    // Create the point cloud and add it to the scene
-    // setPoints({
-    //   positions: particleGoalPositions.slice(),
-    //   colors: colors.slice(),
-    // });
-
     return [positions.slice(), colors.slice()];
+  }
+
+  // Function to repel points away from the mouse cursor
+  function repelPointsFromMouse(
+    mouse2DPosition,
+    repulsionDistance,
+    repulsionStrength,
+    mouseDelta
+  ) {
+    const velocities = velocitiesRef.current;
+    const currentPositions = currentPositionsRef.current;
+    const scaledRepulsionStrength = repulsionStrength * mouseDelta;
+
+    // Loop through each particle and apply repulsion if within range
+    for (let i = 0; i < currentPositions.length; i += 3) {
+      const pointPosition = new Vector3(
+        currentPositions[i],
+        currentPositions[i + 1],
+        currentPositions[i + 2]
+      );
+      const screenPosition = toScreenPosition(pointPosition);
+      const distance = mouse2DPosition.distanceTo(screenPosition);
+
+      // Apply repulsion if the particle is within the repulsion distance
+      if (distance < repulsionDistance) {
+        const direction = new Vector2(
+          screenPosition.x - mouse2DPosition.x,
+          screenPosition.y - mouse2DPosition.y
+        );
+        direction.normalize().multiplyScalar(scaledRepulsionStrength);
+
+        // Apply the repulsion in the X and Y directions
+        velocities[i] += direction.x;
+        velocities[i + 1] -= direction.y; // Y axis is inverted in screen space
+      }
+    }
+  }
+
+  // Convert a 3D position to a 2D screen position
+  function toScreenPosition(obj) {
+    const vector = new Vector3();
+
+    // obj is a vector3
+    vector.copy(obj);
+
+    // Map to normalized device coordinate (NDC) space
+    vector.project(camera);
+
+    // Map to 2D screen space
+    // return new Vector2(
+    //   Math.round(((vector.x + 1) * size.width) / 2),
+    //   Math.round(((-vector.y + 1) * size.height) / 2)
+    // );
+    return vector;
   }
 
   function rotateDestinationAroundYAxis(angle) {
@@ -113,11 +169,7 @@ const EarthPointCloud = () => {
 
     // Offset the Y-axis rotation by 23.5 degrees to simulate Earth's axial tilt
     const axialTilt = 23.5 * (Math.PI / 180); // Convert to radians
-    const tiltedAxis = new Vector3(
-      Math.sin(axialTilt),
-      Math.cos(axialTilt),
-      0
-    );
+    const tiltedAxis = new Vector3(Math.sin(axialTilt), Math.cos(axialTilt), 0);
 
     // Create a rotation matrix around the tilted axis
     const rotationMatrix = new Matrix4();
@@ -139,12 +191,29 @@ const EarthPointCloud = () => {
     }
   }
 
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => {
-    rotateDestinationAroundYAxis(0.005);
+  function calculateMouseDelta(prevPointer, currentPointer) {
+    const delta = new Vector2().subVectors(currentPointer, prevPointer);
+    return delta.length();
+  }
 
-    // const mouse3DPosition = getMouse3DPosition(mouse, camera);
-    // repelPointsFromMouse(mouse3DPosition, 1, 0.1);
+  const prevPointer = useRef(new Vector2(0, 0));
+
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame(({ pointer }, delta) => {
+    if (delta > 0.3) {
+      delta = 0.3;
+    }
+    rotateDestinationAroundYAxis(delta * 0.4);
+
+
+    console.log(delta)
+
+    const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
+    prevPointer.current = pointer.clone();
+    console.log(mouseDelta);
+    if (mouseDelta > 0) {
+      repelPointsFromMouse(pointer, 0.2, 5, mouseDelta);
+    }
 
     const originalPositions = originalPositionsRef.current;
     const positions = currentPositionsRef.current;
@@ -169,8 +238,8 @@ const EarthPointCloud = () => {
       velocities[i * 3 + 2] *= 0.98;
 
       // Write to the buffer
-      if (positions[i * 3 + 2] < -0.20) {
-        buffer[i * 3 ] = 0;
+      if (positions[i * 3 + 2] < -0.2) {
+        buffer[i * 3] = 0;
         buffer[i * 3 + 1] = 0;
         buffer[i * 3 + 2] = 0;
       } else {
@@ -187,9 +256,8 @@ const EarthPointCloud = () => {
   return (
     <>
       <perspectiveCamera
-        ref={cameraRef}
         fov={75}
-        aspect={window.innerWidth / window.innerHeight}
+        aspect={size.width / window.height}
         near={0.1}
         far={1000}
         position={[0, 0, 5]}
