@@ -14,9 +14,11 @@ const SCALE = 2;
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
-  const positionRef = useRef();
+  const bufferRef = useRef();
   const cameraRef = useRef();
+
   const velocitiesRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
+  const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const originalPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
 
   const texture = useLoader(TextureLoader, "/bump.png");
@@ -34,6 +36,7 @@ const EarthPointCloud = () => {
     const [points, colors] = createPointCloud(imageData);
 
     originalPositionsRef.current = points.slice();
+    currentPositionsRef.current = points.slice();
 
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
   }, []);
@@ -108,9 +111,19 @@ const EarthPointCloud = () => {
   function rotateDestinationAroundYAxis(angle) {
     const originalPositions = originalPositionsRef.current;
 
-    const rotationMatrix = new Matrix4();
-    rotationMatrix.makeRotationY(angle);
+    // Offset the Y-axis rotation by 23.5 degrees to simulate Earth's axial tilt
+    const axialTilt = 23.5 * (Math.PI / 180); // Convert to radians
+    const tiltedAxis = new Vector3(
+      Math.sin(axialTilt),
+      Math.cos(axialTilt),
+      0
+    );
 
+    // Create a rotation matrix around the tilted axis
+    const rotationMatrix = new Matrix4();
+    rotationMatrix.makeRotationAxis(tiltedAxis, angle);
+
+    // Apply the rotation to each particle
     for (let i = 0; i < originalPositions.length; i += 3) {
       const x = originalPositions[i];
       const y = originalPositions[i + 1];
@@ -119,6 +132,7 @@ const EarthPointCloud = () => {
       const vector = new Vector3(x, y, z);
       vector.applyMatrix4(rotationMatrix);
 
+      // Update the positions array with the new positions
       originalPositions[i] = vector.x;
       originalPositions[i + 1] = vector.y;
       originalPositions[i + 2] = vector.z;
@@ -127,14 +141,15 @@ const EarthPointCloud = () => {
 
   // Subscribe this component to the render-loop, rotate the mesh every frame
   useFrame((state, delta) => {
-    rotateDestinationAroundYAxis(delta * 0.5);
+    rotateDestinationAroundYAxis(0.005);
 
     // const mouse3DPosition = getMouse3DPosition(mouse, camera);
     // repelPointsFromMouse(mouse3DPosition, 1, 0.1);
 
-    const positions = positionRef.current.array;
-    const velocities = velocitiesRef.current;
     const originalPositions = originalPositionsRef.current;
+    const positions = currentPositionsRef.current;
+    const velocities = velocitiesRef.current;
+    const buffer = bufferRef.current.array;
     // Update positions based on velocities
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       positions[i * 3] += velocities[i * 3] * 0.1;
@@ -152,9 +167,20 @@ const EarthPointCloud = () => {
       velocities[i * 3] *= 0.98;
       velocities[i * 3 + 1] *= 0.98;
       velocities[i * 3 + 2] *= 0.98;
+
+      // Write to the buffer
+      if (positions[i * 3 + 2] < -0.20) {
+        buffer[i * 3 ] = 0;
+        buffer[i * 3 + 1] = 0;
+        buffer[i * 3 + 2] = 0;
+      } else {
+        buffer[i * 3] = positions[i * 3];
+        buffer[i * 3 + 1] = positions[i * 3 + 1];
+        buffer[i * 3 + 2] = positions[i * 3 + 2];
+      }
     }
 
-    positionRef.current.needsUpdate = true;
+    bufferRef.current.needsUpdate = true;
   });
 
   // Return view, these are regular three.js elements expressed in JSX
@@ -171,7 +197,7 @@ const EarthPointCloud = () => {
       <points>
         <bufferGeometry>
           <bufferAttribute
-            ref={positionRef}
+            ref={bufferRef}
             attach={"attributes-position"}
             {...positions}
           />
