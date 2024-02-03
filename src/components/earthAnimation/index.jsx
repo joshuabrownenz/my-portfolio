@@ -53,7 +53,6 @@ const EarthPointCloud = () => {
   function createPointCloud(imageData) {
     // Initialize arrays for positions and colors of the particles
     const colors = new Float32Array(PARTICLE_COUNT * 3);
-
     const positions = new Float32Array(PARTICLE_COUNT * 3);
 
     // TODO: Multiply the matrices
@@ -283,7 +282,7 @@ const EarthPointCloud = () => {
 
 export const EarthAnimation = () => {
   return (
-    <Canvas style={{ width: "500px", height: "500px" }}>
+    <Canvas>
       <Suspense fallback={null}>
         <EarthPointCloud />
       </Suspense>

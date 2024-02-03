@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "@/components/ui/link";
 import { ProjectCard } from "@/components/projectCard/ProjectCard";
 import { BlogCard } from "@/components/blogCard/BlogCard";
+import { EarthAnimation } from "@/components/earthAnimation";
 
 const pageData = {
   title: "Joshua Browne",
@@ -127,7 +128,8 @@ const pageData = {
       },
     ],
 
-    credits: "Built with Gatsby.js, Shadcn/ui and Tailwind CSS, deployed with Netlify. All text is set in the Inter typeface."
+    credits:
+      "Built with Gatsby.js, Shadcn/ui and Tailwind CSS, deployed with Netlify. All text is set in the Inter typeface.",
   },
 };
 
@@ -151,6 +153,9 @@ export default function Index() {
                 {pageData.description}
               </TypographyH4>
               <TypographyP className="pt-2">{pageData.blurb}</TypographyP>
+            </div>
+            <div className="w-full aspect-square relative md:pr-20">
+              <EarthAnimation />
             </div>
             <div>
               <Socials socialLinks={pageData.socialLinks} />
@@ -211,7 +216,9 @@ export default function Index() {
             </div>
 
             <div className="mt-24">
-              <TypographyP className="text-sm">{pageData.content.credits}</TypographyP>
+              <TypographyP className="text-sm">
+                {pageData.content.credits}
+              </TypographyP>
             </div>
           </main>
         </div>
