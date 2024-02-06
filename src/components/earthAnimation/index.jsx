@@ -17,7 +17,8 @@ import {
 } from "three";
 
 const PARTICLE_COUNT = 100000;
-const SCALE = 2;
+const SCALE = 0.025;
+const DEPTH = 0.5;
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
@@ -29,10 +30,10 @@ const EarthPointCloud = () => {
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const originalPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
 
-  const texture = useLoader(TextureLoader, "/bump.png");
+  const texture = useLoader(TextureLoader, "/logo.png"); // Load your logo here
 
   const [positions, colors] = useMemo(() => {
-    // Create a canvas to read pixel data from the texture
+    // Create a canvas to read pixel data from the logo image
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
     canvas.width = texture.image.width;
@@ -40,8 +41,8 @@ const EarthPointCloud = () => {
     context.drawImage(texture.image, 0, 0);
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-    // Create the point cloud based on the texture data
-    const [points, colors] = createPointCloud(imageData);
+    // Create the point cloud based on the logo data
+    const [points, colors] = createPointCloudFromLogo(imageData);
 
     originalPositionsRef.current = points.slice();
     currentPositionsRef.current = points.slice();
@@ -49,64 +50,74 @@ const EarthPointCloud = () => {
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
   }, []);
 
-  // Create the point cloud geometry based on the bump map data
-  function createPointCloud(imageData) {
-    // Initialize arrays for positions and colors of the particles
-    const colors = new Float32Array(PARTICLE_COUNT * 3);
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-
-    // TODO: Multiply the matrices
-    // Create rotation matrices to orient the Earth correctly
-    const rotationMatrixOne = new Matrix4();
-    rotationMatrixOne.makeRotationX(-Math.PI / 2); // Rotate around X-axis
-    const rotationMatrixTwo = new Matrix4();
-    rotationMatrixTwo.makeRotationZ((-Math.PI / 180) * 23.5); // Tilt the Earth by 23.5 degrees
-
-    // Populate the positions and colors arrays based on the texture data
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      // Calculate spherical coordinates for each particle
-      const phi = Math.acos(-1 + (2 * i) / PARTICLE_COUNT);
-      const theta = Math.sqrt(PARTICLE_COUNT * Math.PI) * phi;
-
-      // Convert spherical coordinates to Cartesian coordinates
-      const vector = new Vector3(
-        Math.cos(theta) * Math.sin(phi),
-        Math.sin(theta) * Math.sin(phi),
-        Math.cos(phi)
-      );
-
-      // Apply the rotation to align the Earth correctly
-      vector.applyMatrix4(rotationMatrixOne);
-      vector.applyMatrix4(rotationMatrixTwo);
-
-      // Read pixel data from the bump map to determine the color of the particle
-      const u = (theta / (2 * Math.PI)) * imageData.width;
-      const v = (phi / Math.PI) * imageData.height;
-      const colorIndex = (Math.floor(u) + Math.floor(v) * imageData.width) * 4;
-      const bumpValue = imageData.data[colorIndex]; // Assuming a grayscale bump map
-
-      // Set the color and elevation for land and ocean
-      let color = new Color(0x6f9b59); // Green for land
-      let landElevation = 1.05; // Slightly elevated for land
-      if (bumpValue > 0) {
-        // If the bump map value indicates ocean
-        landElevation = 1;
-        color = new Color(0x2d467f); // Blue for ocean
+  function createPointCloudFromLogo(imageData) {
+    // Initialize arrays for positions and colors
+    const visiblePixels = [];
+    const edges = [];
+    for (let y = 0; y < imageData.height; y++) {
+      let wasPrevXVisable = false;
+      for (let x = 0; x < imageData.width; x++) {
+        const index = (x + y * imageData.width) * 4;
+        if (imageData.data[index + 3] > 128) {
+          if (!wasPrevXVisable) {
+            edges.push({ x, y, index });
+            wasPrevXVisable = true;
+          }
+          // Assuming pixel is visible if opacity > 50%
+          visiblePixels.push({ x, y, index });
+        } else if (wasPrevXVisable) {
+          edges.push({ x: x - 1, y, index });
+          wasPrevXVisable = false;
+        }
       }
-
-      // Calculate the final position of the particle
-      const x = vector.x * landElevation * SCALE;
-      const y = vector.y * landElevation * SCALE;
-      const z = vector.z * landElevation * SCALE;
-
-      // Store the positions and colors in the arrays
-      positions.set([x, y, z], i * 3);
-      colors[i * 3] = color.r;
-      colors[i * 3 + 1] = color.g;
-      colors[i * 3 + 2] = color.b;
     }
 
-    return [positions.slice(), colors.slice()];
+    // Sample points based on PARTICLE_COUNT
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    const colors = new Float32Array(PARTICLE_COUNT * 3);
+
+    visiblePixels.forEach((point, i) => {
+      const { x, y, index } = point;
+      positions.set(
+        [
+          (x - imageData.width / 2) * SCALE,
+          (y - imageData.height / 2) * SCALE,
+          DEPTH / 2,
+        ],
+        i * 3
+      ); // Adjust for 3D position, depth could be added here
+      positions.set(
+        [
+          (x - imageData.width / 2) * SCALE,
+          (y - imageData.height / 2) * SCALE,
+          -DEPTH / 2,
+        ],
+        visiblePixels.length * 3 + i * 3
+      );
+      // Set color, converting from [0, 255] to [0, 1] range
+      const color = new Color(0xffffff);
+      colors.set([color.r, color.g, color.b], i * 3);
+    });
+
+    edges.forEach((point, i) => {
+      const { x, y, index } = point;
+      const EDGE_POINTS = 20;
+      for (let d = 0; d < EDGE_POINTS; d++) {
+        positions.set(
+          [
+            (x - imageData.width / 2) * SCALE,
+            (y - imageData.height / 2) * SCALE,
+            DEPTH / 2 - ((d + 1) * DEPTH / (EDGE_POINTS + 2)),
+          ],
+          visiblePixels.length * 6 + i * 3 * EDGE_POINTS + d * 3
+          );
+
+          const color = new Color(0xffffff);
+          colors.set([color.r, color.g, color.b], visiblePixels.length * 6 + i * 3 * EDGE_POINTS + d * 3);
+      }
+    });
+
+    return [positions, colors];
   }
 
   // Function to repel points away from the mouse cursor
@@ -204,12 +215,8 @@ const EarthPointCloud = () => {
     }
     rotateDestinationAroundYAxis(delta * 0.4);
 
-
-    console.log(delta)
-
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
-    console.log(mouseDelta);
     if (mouseDelta > 0) {
       repelPointsFromMouse(pointer, 0.2, 5, mouseDelta);
     }
@@ -237,15 +244,15 @@ const EarthPointCloud = () => {
       velocities[i * 3 + 2] *= 0.98;
 
       // Write to the buffer
-      if (positions[i * 3 + 2] < -0.2) {
-        buffer[i * 3] = 0;
-        buffer[i * 3 + 1] = 0;
-        buffer[i * 3 + 2] = 0;
-      } else {
-        buffer[i * 3] = positions[i * 3];
-        buffer[i * 3 + 1] = positions[i * 3 + 1];
-        buffer[i * 3 + 2] = positions[i * 3 + 2];
-      }
+      // if (positions[i * 3 + 2] < -0.2) {
+      //   buffer[i * 3] = 0;
+      //   buffer[i * 3 + 1] = 0;
+      //   buffer[i * 3 + 2] = 0;
+      // } else {
+      buffer[i * 3] = positions[i * 3];
+      buffer[i * 3 + 1] = positions[i * 3 + 1];
+      buffer[i * 3 + 2] = positions[i * 3 + 2];
+      // }
     }
 
     bufferRef.current.needsUpdate = true;
