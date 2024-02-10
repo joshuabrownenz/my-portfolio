@@ -32,11 +32,14 @@ extend({ ShaderMaterial });
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
-  const { size } = useThree();
+  const { camera, size } = useThree();
 
   const uniforms = useMemo(
     () => ({
       time: { value: 0.0 },
+      mousePos: { value: new Vector2(0, 0) },
+      repulsionRadius: { value: 5 }, // Example value, adjust based on your needs
+      repulsionStrength: { value: 0.5 }, // Example value, adjust based on your needs
       // any other uniforms you might need
     }),
     []
@@ -64,16 +67,16 @@ const EarthPointCloud = () => {
 
   // Update uniforms on each frame, if needed
   useFrame((state) => {
-    frames++;
-    uniforms.time.value = state.clock.getElapsedTime() * 0.4;
-    // Update other uniforms as necessary
-    const time = performance.now();
-    if (time >= prevTime + 1000) {
-      console.log((frames * 1000) / (time - prevTime));
+    const mousePosInWorld = new Vector3(
+      state.pointer.x * 3, 
+      state.pointer.y * 3
+    );
 
-      prevTime = time;
-      frames = 0;
-    }
+    // const vector = mousePosInWorld.unproject(camera); // Converts from NDC to world space
+
+    uniforms.time.value = state.clock.getElapsedTime() * 0.4;
+    // uniforms.mousePos.value = new Vector2(vector.x, vector.y);
+    uniforms.mousePos.value = new Vector2(mousePosInWorld.x, mousePosInWorld.y);
   });
 
   if (!positions || !colors) {
