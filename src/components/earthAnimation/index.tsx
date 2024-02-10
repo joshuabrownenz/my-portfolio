@@ -1,17 +1,18 @@
-import React, { Suspense, useMemo, useRef, useState } from "react";
-import {
-  Canvas,
-  ThreeElements,
-  useFrame,
-  useLoader,
-  useThree,
-} from "react-three-fiber";
+import { writeFileSync } from "fs";
+import React, {
+  Ref,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
 import {
   BufferAttribute,
   Vector2,
   Vector3,
   Matrix4,
-  PerspectiveCamera,
   TextureLoader,
   Color,
 } from "three";
@@ -22,8 +23,7 @@ const SCALE = 2;
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
   const { camera, size } = useThree();
-  const bufferRef = useRef();
-  const canvasRef = useRef();
+  const bufferRef: Ref<BufferAttribute> = useRef(null);
 
   const velocitiesRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
@@ -31,10 +31,25 @@ const EarthPointCloud = () => {
 
   const texture = useLoader(TextureLoader, "/bump.png");
 
+  const [followSpeed, setFollowSpeed] = useState(1);
+  useEffect(() => {
+    setTimeout(() => {
+      for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+        originalPositionsRef.current[i] = originalPositionsRef.current[i] * 5;
+        setFollowSpeed(0.1);
+      }
+    }, 5000);
+  }, []);
+
   const [positions, colors] = useMemo(() => {
+    console.log("Start");
     // Create a canvas to read pixel data from the texture
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
+    if (!context) {
+      throw new Error("Unsupported canvas context");
+    }
+
     canvas.width = texture.image.width;
     canvas.height = texture.image.height;
     context.drawImage(texture.image, 0, 0);
@@ -46,11 +61,15 @@ const EarthPointCloud = () => {
     originalPositionsRef.current = points.slice();
     currentPositionsRef.current = points.slice();
 
+    console.log(JSON.stringify(points));
+    console.log(JSON.stringify(colors));
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
   }, []);
 
+  console.log("Finish");
+
   // Create the point cloud geometry based on the bump map data
-  function createPointCloud(imageData) {
+  function createPointCloud(imageData: ImageData) {
     // Initialize arrays for positions and colors of the particles
     const colors = new Float32Array(PARTICLE_COUNT * 3);
     const positions = new Float32Array(PARTICLE_COUNT * 3);
@@ -111,10 +130,10 @@ const EarthPointCloud = () => {
 
   // Function to repel points away from the mouse cursor
   function repelPointsFromMouse(
-    mouse2DPosition,
-    repulsionDistance,
-    repulsionStrength,
-    mouseDelta
+    mouse2DPosition: Vector2,
+    repulsionDistance: number,
+    repulsionStrength: number,
+    mouseDelta: number
   ) {
     const velocities = velocitiesRef.current;
     const currentPositions = currentPositionsRef.current;
@@ -146,24 +165,19 @@ const EarthPointCloud = () => {
   }
 
   // Convert a 3D position to a 2D screen position
-  function toScreenPosition(obj) {
+  function toScreenPosition(pointPosition: Vector3) {
     const vector = new Vector3();
 
     // obj is a vector3
-    vector.copy(obj);
+    vector.copy(pointPosition);
 
     // Map to normalized device coordinate (NDC) space
     vector.project(camera);
 
-    // Map to 2D screen space
-    // return new Vector2(
-    //   Math.round(((vector.x + 1) * size.width) / 2),
-    //   Math.round(((-vector.y + 1) * size.height) / 2)
-    // );
-    return vector;
+    return new Vector2(vector.x, vector.y);
   }
 
-  function rotateDestinationAroundYAxis(angle) {
+  function rotateDestinationAroundYAxis(angle: number) {
     const originalPositions = originalPositionsRef.current;
 
     // Offset the Y-axis rotation by 23.5 degrees to simulate Earth's axial tilt
@@ -190,7 +204,7 @@ const EarthPointCloud = () => {
     }
   }
 
-  function calculateMouseDelta(prevPointer, currentPointer) {
+  function calculateMouseDelta(prevPointer: Vector2, currentPointer: Vector2) {
     const delta = new Vector2().subVectors(currentPointer, prevPointer);
     return delta.length();
   }
@@ -199,17 +213,17 @@ const EarthPointCloud = () => {
 
   // Subscribe this component to the render-loop, rotate the mesh every frame
   useFrame(({ pointer }, delta) => {
+    if (!bufferRef.current) {
+      return;
+    }
     if (delta > 0.3) {
       delta = 0.3;
     }
+
     rotateDestinationAroundYAxis(delta * 0.4);
-
-
-    console.log(delta)
 
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
-    console.log(mouseDelta);
     if (mouseDelta > 0) {
       repelPointsFromMouse(pointer, 0.2, 5, mouseDelta);
     }
@@ -225,11 +239,16 @@ const EarthPointCloud = () => {
       positions[i * 3 + 2] += velocities[i * 3 + 2] * 0.1;
 
       // Lerp back to original position
-      positions[i * 3] += (originalPositions[i * 3] - positions[i * 3]) * 0.05;
+      positions[i * 3] +=
+        (originalPositions[i * 3] - positions[i * 3]) * 0.05 * followSpeed;
       positions[i * 3 + 1] +=
-        (originalPositions[i * 3 + 1] - positions[i * 3 + 1]) * 0.05;
+        (originalPositions[i * 3 + 1] - positions[i * 3 + 1]) *
+        0.05 *
+        followSpeed;
       positions[i * 3 + 2] +=
-        (originalPositions[i * 3 + 2] - positions[i * 3 + 2]) * 0.05;
+        (originalPositions[i * 3 + 2] - positions[i * 3 + 2]) *
+        0.05 *
+        followSpeed;
 
       // Damping
       velocities[i * 3] *= 0.98;
@@ -256,7 +275,7 @@ const EarthPointCloud = () => {
     <>
       <perspectiveCamera
         fov={75}
-        aspect={size.width / window.height}
+        aspect={size.width / size.height}
         near={0.1}
         far={1000}
         position={[0, 0, 5]}
