@@ -7,7 +7,7 @@ extend({ ShaderMaterial });
 
 export const EarthAnimation = () => {
   return (
-    <Canvas camera={{ fov: 75, position: [0, 0, 5] }} gl={{ antialias: true, alpha: false }}>
+    <Canvas camera={{ fov: 75, position: [0, 0, 5] }} >
       <Particles numParticles={1000} />
     </Canvas>
   );

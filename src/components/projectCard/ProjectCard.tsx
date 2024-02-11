@@ -26,7 +26,7 @@ type ProjectCardProps = {
 export const ProjectCard: React.FC<ProjectCardProps> = ({ data }) => {
   return (
     <a href={data.url} target="_blank">
-      <Card className="flex relative hover:[&:first-child]:text-primary-foreground">
+      <Card className="flex relative s">
         <div className="w-4 h-4 absolute top-2 right-2">
           <FaExternalLinkAlt />
         </div>
