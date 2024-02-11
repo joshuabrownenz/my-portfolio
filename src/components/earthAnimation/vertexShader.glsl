@@ -1,27 +1,15 @@
 #version 300 es
 precision highp float;
 
-in vec3 position;
-in vec3 velocity;
-in vec3 displacedPosition;
-
+in vec4 position;
 uniform float time;
 
-out vec3 newPosition; // For Transform Feedback
-out vec3 newDisplacedPosition; // For Transform Feedback
+out vec4 feedbackPosition;
+
 
 void main() {
-    float angle = time;
-    mat3 rotationMatrix = mat3(
-        cos(angle), 0.0, sin(angle),
-        0.0, 1.0, 0.0,
-        -sin(angle), 0.0, cos(angle)
-    );
+    feedbackPosition = position + vec4(0.0, time * 0.00, 0.0, 0.0);
 
-    vec3 rotatedPosition = rotationMatrix * position;
-    newPosition = rotatedPosition + velocity; // Example of applying velocity
-    newDisplacedPosition = displacedPosition + velocity; // Example of applying velocity
-
-    gl_Position = vec4(rotatedPosition, 1.0);
-    gl_PointSize = 2.0;
+    gl_Position = feedbackPosition;
+    gl_PointSize = 10.0;
 }

@@ -2,164 +2,130 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "react-three-fiber";
 import vertexShader from "./vertexShader.glsl"; // Your vertex shader code
 import fragmentShader from "./fragmentShader.glsl"; // Your fragment shader code here
+import React from "react";
 
 
 type ParticlesProps = {
   numParticles: number;
-  initialPositions: Float32Array;
-  initialVelocities: Float32Array;
 };
 
-// Function to create a shader
-function createShader(webgl2: WebGL2RenderingContext, type: number, source: string) {
-  let shader = webgl2.createShader(type);
+function createShader(webgl2: WebGL2RenderingContext, type: GLenum, source: string): WebGLShader | null {
+  const shader = webgl2.createShader(type);
   if (!shader) {
-    console.error('Failed to create shader');
+    console.error("Unable to create shader");
     return null;
   }
-
   webgl2.shaderSource(shader, source);
   webgl2.compileShader(shader);
   if (!webgl2.getShaderParameter(shader, webgl2.COMPILE_STATUS)) {
-    console.error('Shader compile failed with: ' + webgl2.getShaderInfoLog(shader));
+    console.error("Shader compile failed: ", webgl2.getShaderInfoLog(shader));
     webgl2.deleteShader(shader);
     return null;
   }
   return shader;
 }
 
-// Function to create a shader program
-function createShaderProgram(webgl2: WebGL2RenderingContext, vertexSource: string, fragmentSource: string) {
-  let vertexShader = createShader(webgl2, webgl2.VERTEX_SHADER, vertexSource);
-  let fragmentShader = createShader(webgl2, webgl2.FRAGMENT_SHADER, fragmentSource);
-  let shaderProgram = webgl2.createProgram();
-  if (!shaderProgram || !vertexShader || !fragmentShader) {
-    console.error('Failed to create shader program');
+function createShaderProgram(webgl2: WebGL2RenderingContext, vertexSource: string, fragmentSource: string): WebGLProgram | null {
+  const vertexShader = createShader(webgl2, webgl2.VERTEX_SHADER, vertexSource);
+  const fragmentShader = createShader(webgl2, webgl2.FRAGMENT_SHADER, fragmentSource);
+  const program = webgl2.createProgram();
+  if (!program || !vertexShader || !fragmentShader) {
+    console.error("Failed to create shader program");
     return null;
   }
+  webgl2.attachShader(program, vertexShader);
+  webgl2.attachShader(program, fragmentShader);
 
-  webgl2.attachShader(shaderProgram, vertexShader);
-  webgl2.attachShader(shaderProgram, fragmentShader);
+  webgl2.transformFeedbackVaryings(program, ["feedbackPosition"], webgl2.SEPARATE_ATTRIBS);
 
-  // Specify the varyings to capture with Transform Feedback
-  webgl2.transformFeedbackVaryings(shaderProgram, ["gl_Position"], webgl2.SEPARATE_ATTRIBS);
-
-  webgl2.linkProgram(shaderProgram);
-  if (!webgl2.getProgramParameter(shaderProgram, webgl2.LINK_STATUS)) {
-    console.error('Program linking failed with: ' + webgl2.getProgramInfoLog(shaderProgram));
+  webgl2.linkProgram(program);
+  if (!webgl2.getProgramParameter(program, webgl2.LINK_STATUS)) {
+    console.error("Program linking failed: ", webgl2.getProgramInfoLog(program));
     return null;
   }
-  return shaderProgram;
+  return program;
 }
 
-const Particles = ({
-  numParticles,
-  initialPositions,
-  initialVelocities,
-}: ParticlesProps) => {
+const Particles: React.FC<ParticlesProps> = ({ numParticles }) => {
   const { gl } = useThree();
-  const transformFeedback = useRef<WebGLTransformFeedback | null>(null);
-  const displacedTransformFeedback = useRef<WebGLTransformFeedback | null>(null);
-  
-  const positionBuffer = useRef<WebGLBuffer | null>(null);
-  const displacedPositionBuffer = useRef<WebGLBuffer | null>(null);
-  const velocityBuffer = useRef<WebGLBuffer | null>(null);
 
-  const shaderProgram = useMemo(() => createShaderProgram(gl.getContext() as WebGL2RenderingContext, vertexShader, fragmentShader), [])
+  const transformFeedback = useRef<WebGLTransformFeedback | null>(null);
+  const positionBuffer = useRef<(WebGLBuffer | null)[]>([null, null]);
+  const shaderProgram = useRef<WebGLProgram | null>(null);
 
   useEffect(() => {
     const webgl2 = gl.getContext() as WebGL2RenderingContext;
+    shaderProgram.current = createShaderProgram(webgl2, vertexShader, fragmentShader);
 
-    // Initialize buffers and transform feedback
-    positionBuffer.current = webgl2.createBuffer();
-    displacedPositionBuffer.current = webgl2.createBuffer();
-    velocityBuffer.current = webgl2.createBuffer();
+    // Create two sets of buffers for positions
+    positionBuffer.current = [webgl2.createBuffer(), webgl2.createBuffer()];
 
-    // Bind buffers
-    webgl2.bindBuffer(webgl2.ARRAY_BUFFER, positionBuffer.current);
-    webgl2.bufferData(webgl2.ARRAY_BUFFER, initialPositions, webgl2.DYNAMIC_COPY);
+    const positions = new Float32Array(numParticles * 4); // Initial positions
+    for (let i = 0; i < numParticles; i++) {
+      positions[i * 4] = Math.random() * 2 - 1; // x
+      positions[i * 4 + 1] = Math.random() * 2 - 1; // y
+      positions[i * 4 + 2] = Math.random() * 2 - 1; // z
+      positions[i * 4 + 3] = 1.0; // w
+    }
 
-    webgl2.bindBuffer(webgl2.ARRAY_BUFFER, displacedPositionBuffer.current);
-    webgl2.bufferData(webgl2.ARRAY_BUFFER, initialPositions, webgl2.DYNAMIC_COPY);
+    // Initialize both buffers with the same initial positions
+    positionBuffer.current.forEach(buffer => {
+      webgl2.bindBuffer(webgl2.ARRAY_BUFFER, buffer);
+      webgl2.bufferData(webgl2.ARRAY_BUFFER, positions, webgl2.STATIC_DRAW);
+    });
 
-    webgl2.bindBuffer(webgl2.ARRAY_BUFFER, velocityBuffer.current);
-    webgl2.bufferData(webgl2.ARRAY_BUFFER, initialVelocities, webgl2.DYNAMIC_COPY);
-
-
+    // Setup Transform Feedback
     transformFeedback.current = webgl2.createTransformFeedback();
-    webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, transformFeedback.current);
-    webgl2.bindBufferBase(webgl2.TRANSFORM_FEEDBACK_BUFFER, 0, positionBuffer.current);
-
-    displacedTransformFeedback.current = webgl2.createTransformFeedback();
-    webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, displacedTransformFeedback.current);
-    webgl2.bindBufferBase(webgl2.TRANSFORM_FEEDBACK_BUFFER, 0, displacedPositionBuffer.current);
 
     return () => {
-      // Cleanup
-      webgl2.deleteBuffer(positionBuffer.current);
-      webgl2.deleteBuffer(velocityBuffer.current);
-      webgl2.deleteTransformFeedback(transformFeedback.current);
-      webgl2.deleteTransformFeedback(displacedTransformFeedback.current);
+      positionBuffer.current.forEach(buffer => {
+        if (buffer) webgl2.deleteBuffer(buffer);
+      });
+      if (transformFeedback.current) webgl2.deleteTransformFeedback(transformFeedback.current);
     };
-  }, [gl, numParticles, initialPositions, initialVelocities]);
+  }, [gl, numParticles]);
+
+
+  const currentBufferIndex = useRef(0); // Keep track of which buffer we're using
 
   useFrame(() => {
+    if (!shaderProgram.current || !positionBuffer.current[0] || !positionBuffer.current[1]) return;
+
     const webgl2 = gl.getContext() as WebGL2RenderingContext;
+    webgl2.useProgram(shaderProgram.current);
 
-    if (!shaderProgram) {
-      console.error('Shader program not initialized');
-      return;
-    }
+    // Determine the current and next buffer indices
+    const inputBufferIndex = currentBufferIndex.current;
+    const outputBufferIndex = (currentBufferIndex.current + 1) % 2;
 
-    webgl2.useProgram(shaderProgram);
+    // Setup input buffer as vertex attributes
+    const positionAttribLocation = webgl2.getAttribLocation(shaderProgram.current, 'position');
+    webgl2.bindBuffer(webgl2.ARRAY_BUFFER, positionBuffer.current[inputBufferIndex]);
+    webgl2.vertexAttribPointer(positionAttribLocation, 4, webgl2.FLOAT, false, 0, 0);
+    webgl2.enableVertexAttribArray(positionAttribLocation);
 
-    // Set up attribute pointers here, for example:
-    const positionAttribLocation = webgl2.getAttribLocation(shaderProgram, 'position');
-    const displacedPositionAtrribLocation = webgl2.getAttribLocation(shaderProgram, 'displacedPosition');
-    const velocityAtrribLocation = webgl2.getAttribLocation(shaderProgram, 'velocity');
-    if (!shaderProgram || positionAttribLocation === -1 || displacedPositionAtrribLocation === -1 || velocityAtrribLocation === -1) {
-      console.log(shaderProgram, positionAttribLocation, displacedPositionAtrribLocation, velocityAtrribLocation)
-      console.error('Attribute location not found');
-      return;
-    }
-    
-    // For position
-  webgl2.bindBuffer(webgl2.ARRAY_BUFFER, positionBuffer.current);
-  webgl2.vertexAttribPointer(positionAttribLocation, 3, webgl2.FLOAT, false, 0, 0);
-  webgl2.enableVertexAttribArray(positionAttribLocation);
+    // Prepare for transform feedback using the output buffer
+    webgl2.enable(webgl2.RASTERIZER_DISCARD);
+    webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, transformFeedback.current);
+    webgl2.bindBufferBase(webgl2.TRANSFORM_FEEDBACK_BUFFER, 0, positionBuffer.current[outputBufferIndex]);
 
-  // For displacedPosition
-  webgl2.bindBuffer(webgl2.ARRAY_BUFFER, displacedPositionBuffer.current);
-  webgl2.vertexAttribPointer(displacedPositionAtrribLocation, 3, webgl2.FLOAT, false, 0, 0);
-  webgl2.enableVertexAttribArray(displacedPositionAtrribLocation);
+    // Perform the draw call
+    webgl2.beginTransformFeedback(webgl2.POINTS);
+    webgl2.drawArrays(webgl2.POINTS, 0, numParticles);
+    webgl2.endTransformFeedback();
 
-  // For velocity
-  webgl2.bindBuffer(webgl2.ARRAY_BUFFER, velocityBuffer.current);
-  webgl2.vertexAttribPointer(velocityAtrribLocation, 3, webgl2.FLOAT, false, 0, 0);
-  webgl2.enableVertexAttribArray(velocityAtrribLocation);
-
-  // **Important**: Unbind the ARRAY_BUFFER to avoid the GL_INVALID_OPERATION error
-  webgl2.bindBuffer(webgl2.ARRAY_BUFFER, null);
-
-  // Prepare for transform feedback
-  webgl2.enable(webgl2.RASTERIZER_DISCARD);
-  webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, transformFeedback.current);
-  webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, displacedTransformFeedback.current);
-  webgl2.beginTransformFeedback(webgl2.POINTS);
-
-  // Perform the draw call
-  webgl2.drawArrays(webgl2.POINTS, 0, numParticles);
-
-  // End transform feedback and restore state
-  webgl2.endTransformFeedback();
-  webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, null); // Unbind transform feedback object
-  webgl2.disable(webgl2.RASTERIZER_DISCARD);
-
-  gl.autoClear = true; // Restore R3F autoClear state
-});
+    // Unbind and clean up
+    webgl2.disable(webgl2.RASTERIZER_DISCARD);
+    webgl2.bindBuffer(webgl2.ARRAY_BUFFER, null);
+    webgl2.bindTransformFeedback(webgl2.TRANSFORM_FEEDBACK, null);
 
 
-  return null; // This component does not directly render anything visible
+    // Update the index for the next frame
+    currentBufferIndex.current = outputBufferIndex;
+  });
+
+
+  return null;
 };
 
 export { Particles };

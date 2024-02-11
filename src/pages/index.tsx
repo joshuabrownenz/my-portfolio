@@ -92,7 +92,7 @@ const pageData = {
         end: "Present",
       },
       {
-        company: "Freelance",
+        company: "Freelance 2",
         role: "Fullstack Developer",
         description:
           "I'm also a freelance developer, working with a variety of clients to build websites and web applications.",
@@ -111,7 +111,7 @@ const pageData = {
         tags: ["Rust", "Database"],
       },
       {
-        title: "Database From Scratch",
+        title: "Database From Scratch 2",
         description: "A self implemented database in Rust",
         url: "https://www.coffeecapsules2u.co.nz",
         thumbnailUrl: "https://via.placeholder.com/200x150",
