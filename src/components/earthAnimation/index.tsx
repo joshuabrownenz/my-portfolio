@@ -18,7 +18,7 @@ import {
 } from "three";
 
 const PARTICLE_COUNT = 100000;
-const SCALE = 2;
+const SCALE = 2.5;
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
@@ -32,17 +32,8 @@ const EarthPointCloud = () => {
   const texture = useLoader(TextureLoader, "/bump.png");
 
   const [followSpeed, setFollowSpeed] = useState(1);
-  useEffect(() => {
-    setTimeout(() => {
-      for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
-        originalPositionsRef.current[i] = originalPositionsRef.current[i] * 5;
-        setFollowSpeed(0.1);
-      }
-    }, 5000);
-  }, []);
 
   const [positions, colors] = useMemo(() => {
-    console.log("Start");
     // Create a canvas to read pixel data from the texture
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
@@ -220,12 +211,12 @@ const EarthPointCloud = () => {
       delta = 0.3;
     }
 
-    rotateDestinationAroundYAxis(delta * 0.4);
+    rotateDestinationAroundYAxis(delta * 0.05);
 
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
     if (mouseDelta > 0) {
-      repelPointsFromMouse(pointer, 0.2, 5, mouseDelta);
+      repelPointsFromMouse(pointer, 0.15, 3, mouseDelta);
     }
 
     const originalPositions = originalPositionsRef.current;
