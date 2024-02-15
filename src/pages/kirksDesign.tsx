@@ -155,16 +155,14 @@ export default function Index() {
                 </div>
             </header>
             <main className="aspect-[4/3] relative">
-                <div className="flex gap-6">
-                <div className="w-full flex justify-center mt-20">
-                    <LabelContainer angle="left45" />
+                <div className="absolute z-50" style={{ left: "25%", top: "25%" }}>
+                    <LabelContainer angle="left45" text="Projects" />
                 </div>
-                <div className="w-full flex justify-center mt-20">
-                    <LabelContainer angle="up" />
+                <div className="absolute z-50" style={{left: "45%"}}>
+                    <LabelContainer angle="up" text="My Story"  />
                 </div>
-                <div className="w-full flex justify-center mt-20">
-                    <LabelContainer angle="right45" />
-                </div>
+                <div className="absolute z-50" style={{ top: "15%", right: "25%" }}>
+                    <LabelContainer angle="right45" text="Experience" />
                 </div>
                 <EarthAnimation />
             </main>

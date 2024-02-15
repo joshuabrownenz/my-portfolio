@@ -5,9 +5,10 @@ import { LabelLineAndText } from "./LabelLineAndText"; // Import the new compone
 
 type LabelContainerProps = {
     angle: "up" | "right45" | "left45";
+    text: string;
 }
 
-export const LabelContainer: React.FC<LabelContainerProps> = ({ angle }) => {
+export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text }) => {
     const [active, setActive] = React.useState(false);
 
     return (
@@ -24,7 +25,7 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle }) => {
             style={{ position: "relative", width: "200px", height: "200px" }} // Ensure enough space for the label and line
         >
             <LabelDot isActive={active} />
-            <LabelLineAndText active={active} angle={angle} length={100} text="Your Text Here" /> {/* Example usage */}
+            <LabelLineAndText active={active} angle={angle} length={100} text={text} /> {/* Example usage */}
         </div>
     );
 }
