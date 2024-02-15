@@ -16,6 +16,9 @@ import { ProjectCard } from "@/components/projectCard/ProjectCard";
 import { BlogCard } from "@/components/blogCard/BlogCard";
 import { EarthAnimation } from "@/components/earthAnimation";
 import { NavMenu } from "@/components/navMenu";
+import { LabelDot } from "@/components/label/LabelDot";
+import { Label } from "@/components/ui/label";
+import { LabelContainer } from "@/components/label/LabelContainer";
 
 const pageData = {
     title: "Joshua Browne",
@@ -151,7 +154,18 @@ export default function Index() {
                     <TypographyP className="pt-2">{pageData.blurb}</TypographyP>
                 </div>
             </header>
-            <main className="aspect-[4/3]">
+            <main className="aspect-[4/3] relative">
+                <div className="flex gap-6">
+                <div className="w-full flex justify-center mt-20">
+                    <LabelContainer angle="left45" />
+                </div>
+                <div className="w-full flex justify-center mt-20">
+                    <LabelContainer angle="up" />
+                </div>
+                <div className="w-full flex justify-center mt-20">
+                    <LabelContainer angle="right45" />
+                </div>
+                </div>
                 <EarthAnimation />
             </main>
 

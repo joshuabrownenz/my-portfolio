@@ -43,6 +43,10 @@ const config: GatsbyConfig = {
             name: `Inter`,
             file: `https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;700&display=swap`,
           },
+          {
+            name: "Manrope",
+            file: "https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap",
+          },
         ],
       },
     },
