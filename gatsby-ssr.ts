@@ -6,7 +6,7 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
 }) => {
   const link = React.createElement("link", {
     rel: "preload",
-    href: "/fonts/MangoGrotesque-Black.woff2",
+    href: "/fonts/MangoGrotesque-Bold.woff2",
     as: "font",
     type: "font/woff2",
     crossOrigin: "anonymous",

@@ -14,7 +14,7 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onC
 
     return (
         <div
-            className="flex items-end justify-center"
+            className="flex justify-center"
             onMouseEnter={() => {
                 setActive(true)
                 console.log("enter")
@@ -24,10 +24,10 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onC
                 console.log("leave")
             }}
             onClick={onClick}
-            style={{ position: "relative", width: "200px", height: "200px" }} // Ensure enough space for the label and line
+            style={{ position: "relative", width: "100px", height: "100px" }} // Ensure enough space for the label and line
         >
             <LabelDot isActive={active} />
-            <LabelLineAndText active={active} angle={angle} length={100} text={text} /> {/* Example usage */}
+            <LabelLineAndText active={active} angle={angle} length={100} text={text} textUnderlineLength={70} /> {/* Example usage */}
         </div>
     );
 }

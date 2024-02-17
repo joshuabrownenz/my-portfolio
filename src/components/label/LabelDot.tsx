@@ -23,7 +23,7 @@ export const LabelDot: React.FC<LabelDotProps> = ({ className, isActive }) => {
 
     return (
         <div className={`flex items-center justify-center full ${className}`}>
-            <div className="relative w-8 h-8">
+            <div className="w-8 h-8">
                 <div className={cn(circleContainer, "innerDot")}>
                     <div className={`${circleBase} w-3 h-3 bg-white ${animate}`} />
                 </div>
