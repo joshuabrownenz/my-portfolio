@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cn } from "../lib/utils";
-// tslint:disable-next-line
 import { EarthAnimation } from "@/components/earthAnimation";
 
 export default function Index() {

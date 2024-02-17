@@ -18,6 +18,7 @@ module.exports = {
     },
     fontFamily: {
       manrope: ["Manrope", "sans-serif"],
+      roboto: ["Roboto", "sans-serif"],
     },
     extend: {
       colors: {
