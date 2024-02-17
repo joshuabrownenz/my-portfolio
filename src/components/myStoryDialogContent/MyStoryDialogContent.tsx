@@ -3,9 +3,13 @@ import { Heading, Typography } from "../typography";
 import { FakeLink } from "../fakeLink/FakeLink";
 import { StaticImage } from "gatsby-plugin-image";
 
-export const MyStoryDialogContent: FC = () => {
+type MyStoryDialogContentProps = {
+    className?: string;
+}
+
+export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({className}) => {
     return (
-        <>
+        <div className={className}>
             <Heading variant={"large"}>
                 My Story
             </Heading>
@@ -37,6 +41,6 @@ export const MyStoryDialogContent: FC = () => {
                     </Typography>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

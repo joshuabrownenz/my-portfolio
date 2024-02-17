@@ -1,18 +1,18 @@
 import React, { FC } from "react"
-import { DialogHeader } from "../ui/dialog"
 import { Project } from "@/types";
 import { ProjectCard } from "../projectCard/ProjectCard";
 import { Heading } from "../typography";
 
 
 type ProjectsDialogContentProps = {
+    className?: string;
     projects: Project[];
 }
 
-export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ projects }) => {
+export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ className, projects }) => {
     const projectsOnPage = projects.slice(0, 3);
     return (
-        <>
+        <div className={className}>
             <Heading variant={"large"}>
                 Featured Projects
             </Heading>
@@ -21,6 +21,6 @@ export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ projects
                     <ProjectCard key={project.title} project={project} />
                 ))}
             </div>
-        </>
+        </div>
     )
 }

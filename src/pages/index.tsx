@@ -36,8 +36,8 @@ export const Index: React.FC<PageProps> = ({ location }) => {
             <main className="aspect-[4/3] relative">
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
-                        {activeTab === "projects" && <ProjectsDialogContent projects={PAGE_DATA.projects} />}
-                        {activeTab === "my-story" && <MyStoryDialogContent />}
+                        <ProjectsDialogContent className={hash !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
+                        <MyStoryDialogContent className={hash !== "my-story" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
                 <div className="absolute z-50" style={{ left: "25%", top: "25%" }}>
