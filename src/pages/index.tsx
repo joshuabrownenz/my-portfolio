@@ -62,4 +62,14 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     );
 }
 
+export function Head() {
+    return (
+        <>
+            <title>Joshua Browne</title>
+            <meta name="description" content="Joshua Browne's personal website" />
+            <meta name="keywords" content="Joshua Browne, Josh Browne, Software Engineer, Developer, Web Developer, Full Stack Developer, Rust" />
+        </>
+    )
+}
+
 export default Index;
