@@ -12,6 +12,7 @@ import { StaticImage } from "gatsby-plugin-image";
 import { Heading, Typography } from "../typography";
 import { Link } from "gatsby";
 import { ArrowUpRight } from "lucide-react";
+import { FakeLink } from "../fakeLink/FakeLink";
 
 type ProjectCardProps = {
   project: Project;
@@ -35,12 +36,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 </Typography>
               </Badge>
             ))}
-            <div className="flex px-2.5 gap-1 items-center">
-              <Typography variant="badge" className="group-hover:underline underline-offset-4">
-                VIEW PROJECT
-              </Typography>
-              <ArrowUpRight className="w-4 h-4" />
-            </div>
+            <FakeLink>
+              VIEW PROJECT
+            </FakeLink>
           </div>
         </CardFooter>
       </Card>

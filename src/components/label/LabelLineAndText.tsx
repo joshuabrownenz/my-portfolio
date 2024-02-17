@@ -45,7 +45,7 @@ export const LabelLineAndText: React.FC<LabelLineAndTextProps> = ({ startX = 50,
         let textY = endY - 10; // Adjust y position for text to appear above the line end
 
         if (angle === 'left45') {
-            textX = endX - 50 ;
+            textX = endX - 50;
         } else if (angle === 'right45') {
             textX = endX;
         }
@@ -64,45 +64,59 @@ export const LabelLineAndText: React.FC<LabelLineAndTextProps> = ({ startX = 50,
         }
     }
 
+    const calculatePathD = (startX: number, startY: number, endX: number, endY: number, underlineEndX: number) => {
+        // Move to start point
+        let d = `M ${startX},${startY} `;
+        // Line to end point
+        d += `L ${endX},${endY} `;
+        // If angle requires, continue line to underline end point
+        if (angle === 'left45' || angle === 'right45') {
+            d += `L ${underlineEndX},${endY}`;
+        }
+        return d;
+    };
 
     // Adjustments for active state
-    const activeLength = active ? length * 1.5 : length; // Increase length by 50% if active
+    // const activeLength = active ? length * 1.5 : length; // Increase length by 50% if active
+    const activeLength = length; // Increase length by 50% if active
     const { endX, endY } = calculatePoints(angle, activeLength);
     const { underlineEndX } = calculateUnderlinePoints(endX, angle, textUnderlineLength);
     const { textX, textY } = calculateTextPosition(endX, endY, angle);
     const textAnchor = calculateTextAnchor(angle);
 
+    const pathD = calculatePathD(startX, startY, endX, endY, underlineEndX);
+
     return (
-        <svg width="100" height="100" style={{ position: 'absolute', overflow: 'visible' }}>
-            {/* Draw the line */}
-            <line
-                x1={startX} // Center of the dot
-                y1={startY} // Center of the dot
-                x2={endX}
-                y2={endY}
-                stroke="white"
-                strokeWidth="2"
-            />
-            {angle !== "up" && <line
-                x1={endX} // Center of the dot
-                y1={endY} // Center of the dot
-                x2={underlineEndX}
-                y2={endY}
-                stroke="white"
-                strokeWidth="2"
-            />}
-            <text
-                x={textX}
-                y={textY} // Adjust y position for text to appear above the line end
-                fill="white"
-                fontSize="12"
-                fontWeight="bold"
-                textAnchor={textAnchor}
-                dominantBaseline="central"
-                style={{ transition: 'all 0.7s ease' }}
-            >
-                {text}
-            </text>
-        </svg>
+        <div style={{
+            position: 'absolute',
+            width: '100px',
+            height: '100px',
+            transition: 'transform 0.7s ease',
+            transform: `scale(${active ? 1.5 : 1})`,
+            transformOrigin: 'center'
+        }}>
+            <svg width="100" height="100" style={{ overflow: 'visible' }}>
+                <path
+                    d={pathD}
+                    stroke="white"
+                    strokeWidth="2"
+                    fill="none"
+                    style={{ transition: 'all 0.7s ease' }} 
+                    />
+                <text
+                    x={textX}
+                    y={textY} // Adjust y position for text to appear above the line end
+                    fill="white"
+                    fontFamily='Manrope'
+                    fontSize="12"
+                    fontWeight="bold"
+                    textAnchor={textAnchor}
+                    dominantBaseline="central"
+                    style={{ transition: 'all 0.7s ease' }}
+                >
+                    {text}
+                </text>
+            </svg>
+        </div>
     );
 };

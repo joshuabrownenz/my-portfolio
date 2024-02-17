@@ -23,14 +23,14 @@ export const LabelDot: React.FC<LabelDotProps> = ({ className, isActive }) => {
 
     return (
         <div className={`flex items-center justify-center full ${className}`}>
-            <div className="w-8 h-8">
+            <div className=" w-8 h-8">
                 <div className={cn(circleContainer, "innerDot")}>
                     <div className={`${circleBase} w-3 h-3 bg-white ${animate}`} />
                 </div>
-                <div className={cn(circleContainer, "midDot")}>
+                <div className={cn(circleContainer, "animate-pulse midDot")}>
                     <div className={`${circleBase} w-5 h-5 blur-[0.5px] bg-white/60 ${animate}`} />
                 </div>
-                <div className={cn(circleContainer, "outerDot")}>
+                <div className={cn(circleContainer, "animate-pulse outerDot")}>
                     <div className={`${circleBase} w-7 h-7 blur-[1px] bg-white/30 ${animate}`} />
                 </div>
             </div>

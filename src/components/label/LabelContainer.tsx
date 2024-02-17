@@ -7,9 +7,11 @@ type LabelContainerProps = {
     angle: "up" | "right45" | "left45";
     text: string;
     onClick?: () => void;
+    length?: number;
+    textUnderlineLength?: number;
 }
 
-export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick }) => {
+export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick, length = 100, textUnderlineLength = 70 }) => {
     const [active, setActive] = React.useState(false);
 
     return (
@@ -27,7 +29,7 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onC
             style={{ position: "relative", width: "100px", height: "100px" }} // Ensure enough space for the label and line
         >
             <LabelDot isActive={active} />
-            <LabelLineAndText active={active} angle={angle} length={100} text={text} textUnderlineLength={70} /> {/* Example usage */}
+            <LabelLineAndText active={active} angle={angle} length={length} text={text} textUnderlineLength={textUnderlineLength} /> {/* Example usage */}
         </div>
     );
 }

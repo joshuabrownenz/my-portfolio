@@ -11,6 +11,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { PAGE_DATA } from "@/constants";
 import { ProjectsDialogContent } from "@/components/projectsDialogContent/ProjectsDialogContent";
 import { Header } from "@/components/header/Header";
+import { MyStoryDialogContent } from "@/components/myStoryDialogContent/MyStoryDialogContent";
 
 type Section = "my-story" | "experience" | "projects";
 
@@ -30,9 +31,9 @@ export default function Index() {
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogContent className="container">
                         {activeTab === "projects" && <ProjectsDialogContent projects={PAGE_DATA.projects} />}
+                        {activeTab === "my-story" && <MyStoryDialogContent />}
                     </DialogContent>
                 </Dialog>
-
                 <div className="absolute z-50" style={{ left: "25%", top: "25%" }}>
                     <LabelContainer angle="left45" text="Projects" onClick={() => handleClick("projects")} />
                 </div>
