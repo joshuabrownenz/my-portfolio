@@ -6,9 +6,10 @@ import { LabelLineAndText } from "./LabelLineAndText"; // Import the new compone
 type LabelContainerProps = {
     angle: "up" | "right45" | "left45";
     text: string;
+    onClick?: () => void;
 }
 
-export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text }) => {
+export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick }) => {
     const [active, setActive] = React.useState(false);
 
     return (
@@ -22,6 +23,7 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text }) =
                 setActive(false)
                 console.log("leave")
             }}
+            onClick={onClick}
             style={{ position: "relative", width: "200px", height: "200px" }} // Ensure enough space for the label and line
         >
             <LabelDot isActive={active} />

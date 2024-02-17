@@ -9,16 +9,9 @@ import {
 import { Socials } from "@/components/socials";
 import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { SiCredly } from "react-icons/si";
-import { ExperienceCard } from "@/components/experienceCard/ExperienceCard";
-import { Separator } from "@/components/ui/separator";
-import { Link } from "@/components/ui/link";
-import { ProjectCard } from "@/components/projectCard/ProjectCard";
-import { BlogCard } from "@/components/blogCard/BlogCard";
 import { EarthAnimation } from "@/components/earthAnimation";
-import { NavMenu } from "@/components/navMenu";
-import { LabelDot } from "@/components/label/LabelDot";
-import { Label } from "@/components/ui/label";
 import { LabelContainer } from "@/components/label/LabelContainer";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const pageData = {
     title: "Joshua Browne",
@@ -138,6 +131,14 @@ const pageData = {
 };
 
 export default function Index() {
+    const [activeTab, setActiveTab] = React.useState<"my-story" | "experience" | "projects" | null>(null);
+
+    const handleSetDialogOpen = (open: boolean) => {
+        if (!open) {
+            setActiveTab(null);
+        }
+    };
+
     return (
         <div className={cn("w-full min-h-screen md:max-h-screen md:overflow-hidden")}>
 
@@ -154,15 +155,24 @@ export default function Index() {
                     <TypographyP className="pt-2">{pageData.blurb}</TypographyP>
                 </div>
             </header>
+
             <main className="aspect-[4/3] relative">
+                <Dialog open={!!activeTab} onOpenChange={handleSetDialogOpen}>
+                    <DialogContent className="container">
+                        <div className="w-full">
+                            Test
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
                 <div className="absolute z-50" style={{ left: "25%", top: "25%" }}>
-                    <LabelContainer angle="left45" text="Projects" />
+                    <LabelContainer angle="left45" text="Projects" onClick={() => setActiveTab("projects")} />
                 </div>
-                <div className="absolute z-50" style={{left: "45%"}}>
-                    <LabelContainer angle="up" text="My Story"  />
+                <div className="absolute z-50" style={{ left: "45%" }}>
+                    <LabelContainer angle="up" text="My Story" onClick={() => setActiveTab("my-story")}/>
                 </div>
                 <div className="absolute z-50" style={{ top: "15%", right: "25%" }}>
-                    <LabelContainer angle="right45" text="Experience" />
+                    <LabelContainer angle="right45" text="Experience" onClick={() => setActiveTab("experience")}/>
                 </div>
                 <EarthAnimation />
             </main>
