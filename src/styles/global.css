@@ -2,8 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'MangoGrotesque';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(/fonts/MangoGrotesque-Black.woff2) format('woff2');
+}
+
 @layer base {
   :root {
+    --global-margin-x: 2rem;
+    
     --background: #ffffff;
     --foreground: #ffffff;
 

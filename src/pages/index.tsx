@@ -10,6 +10,7 @@ import { LabelContainer } from "@/components/label/LabelContainer";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { PAGE_DATA } from "@/constants";
 import { ProjectsDialogContent } from "@/components/projectsDialogContent/ProjectsDialogContent";
+import { Header } from "@/components/header/Header";
 
 type Section = "my-story" | "experience" | "projects";
 
@@ -24,25 +25,11 @@ export default function Index() {
 
     return (
         <div className={cn("w-full min-h-screen md:max-h-screen md:overflow-hidden")}>
-
-            <header
-                className={cn(
-                    "w-full flex items-center justify-center text-center md:flex-col md:pt-24"
-                )}
-            >
-                <div>
-                    <TypographyH1>{PAGE_DATA.title}</TypographyH1>
-                    <TypographyH4 className="pt-4">
-                        {PAGE_DATA.description}
-                    </TypographyH4>
-                    <TypographyP className="pt-2">{PAGE_DATA.blurb}</TypographyP>
-                </div>
-            </header>
-
+            <Header />
             <main className="aspect-[4/3] relative">
                 <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                     <DialogContent className="container">
-                        {activeTab === "projects" && <ProjectsDialogContent projects={PAGE_DATA.projects}/>}
+                        {activeTab === "projects" && <ProjectsDialogContent projects={PAGE_DATA.projects} />}
                     </DialogContent>
                 </Dialog>
 

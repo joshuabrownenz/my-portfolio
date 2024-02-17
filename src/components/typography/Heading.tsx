@@ -5,8 +5,9 @@ import { headingVariants } from ".";
 
 type ComponentType = "h1" | "h2" | "h3";
 
-const mapVariantToComponent: Record<string, ComponentType> = {
+const mapVariantToComponent: Record<Exclude<VariantProps<typeof headingVariants>["variant"], null | undefined>, ComponentType> = {
   large: "h1",
+  headerTitle: "h2",
   medium: "h2",
   small: "h3",
 };

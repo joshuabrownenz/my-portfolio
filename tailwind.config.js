@@ -19,6 +19,7 @@ module.exports = {
     fontFamily: {
       manrope: ["Manrope", "sans-serif"],
       roboto: ["Roboto", "sans-serif"],
+      "mango-grotesque": ["MangoGrotesque", "sans-serif"],
     },
     extend: {
       colors: {

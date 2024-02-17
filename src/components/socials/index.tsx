@@ -1,3 +1,4 @@
+import { PAGE_DATA } from "@/constants";
 import { cn } from "@/lib/utils";
 import React, { AnchorHTMLAttributes, FC } from "react";
 import { IconType } from "react-icons";
@@ -29,14 +30,16 @@ export const SocialLink: FC<AnchorHTMLAttributes<HTMLAnchorElement>> = ({
   );
 };
 
-export const Socials: FC<{
-  socialLinks: SocialLink[];
-}> = ({ socialLinks }) => {
+type SocialsProps = {
+  className?: string;
+};
+
+export const Socials: FC<SocialsProps> = ({className}) => {
   return (
-    <ul className="flex" aria-label="Social Media">
-      {socialLinks.map((social) => {
+    <ul className={cn("flex gap-5 justify-center", className)} aria-label="Social Media">
+      {PAGE_DATA.socialLinks.map((social) => {
         return (
-          <li key={social.title} className="mr-5">
+          <li key={social.title}>
             <SocialLink
               href={social.url}
               title={social.title}

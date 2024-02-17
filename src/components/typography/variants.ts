@@ -1,17 +1,9 @@
 import { cva } from "class-variance-authority";
 
-// color: #FFF;
-
-// font-family: Manrope;
-// font-size: 18.824px;
-// font-style: normal;
-// font-weight: 800;
-// line-height: normal;
-// letter-spacing: -0.188px;
-// text-transform: capitalize;
-export const headingVariants = cva("font-gibson scroll-m-20", {
+export const headingVariants = cva("font-manrope scroll-m-20", {
   variants: {
     variant: {
+      headerTitle: "text-xl font-semi-bold tracking-[0.453px]",
       large: "text-4xl tracking-[-1px] font-bold capitalize",
       medium: "text-[45px] leading-[52px] font-semibold",
       small: "text-[36px] leading-[44px] font-semibold",

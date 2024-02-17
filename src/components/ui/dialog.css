@@ -1,16 +1,12 @@
-:root {
-  --margin-x-dialog: 2rem;
-}
-
 #dialog-content {
   position: fixed;
 
-  top: 50%;
+  top: 55%;
   left: 50%;
   right: 50%;
   transform: translate(-50%, -50%);
 
-  width: calc(100% - 2 * var(--margin-x-dialog));
+  width: calc(100% - 2 * var(--global-margin-x));
 
   border-radius: 50px;
   background: linear-gradient(

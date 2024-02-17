@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export type PageData = {
   title: string;
   description: string;
@@ -11,7 +13,7 @@ export type SocialLink = {
   url: string;
   title: string;
   ariaLabel: string;
-  icon: React.FC;
+  icon: IconType;
 };
 
 export type Experience = {
