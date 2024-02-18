@@ -307,15 +307,6 @@ const EarthPointCloud = () => {
   );
 };
 
-const scale = 100; // Adjust based on your scene's scale
-const aspect = window.innerWidth / window.innerHeight;
-const frustumSize = 50; // Adjust for the size of the visible area
-
-const left = (-frustumSize * aspect) / 2;
-const right = (frustumSize * aspect) / 2;
-const top = frustumSize / 2;
-const bottom = -frustumSize / 2;
-
 export const EarthAnimation = () => {
   return (
     <Canvas className="w-screen overflow-hidden" style={{ height: "200vh"}}>

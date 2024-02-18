@@ -40,18 +40,18 @@ export const Index: React.FC<PageProps> = ({ location }) => {
                         <MyStoryDialogContent className={hash !== "my-story" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", height: "50vh", width: "120vh", height: "60vh" }}>
-                    <div className="absolute z-50" style={{ left: "25%", top: "25%" }}>
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "120vh", height: "60vh" }}>
+                    <div className="absolute z-50" style={{ left: "15%", top: "65%" }}>
                         <a href="/#projects">
                             <LabelContainer angle="left45" text="Projects" />
                         </a>
                     </div>
-                    <div className="absolute z-50" style={{ left: "45%" }}>
+                    <div className="absolute z-50" style={{ top: "20%", left: "50%" }}>
                         <a href="/#my-story">
                             <LabelContainer angle="up" text="My Story" />
                         </a>
                     </div>
-                    <div className="absolute z-50" style={{ top: "15%", right: "25%" }}>
+                    <div className="absolute z-50" style={{ top: "50%", right: "10%" }}>
                         <a href="/#experience">
                             <LabelContainer angle="right45" text="Experience" />
                         </a>
