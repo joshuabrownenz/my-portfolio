@@ -1,67 +1,29 @@
-.labelContainer {
-  
-}
-
-.innerDot .grow {
-  animation: grow 1s ease-in-out forwards;
-}
-
-.midDot .grow {
-  animation: grow 0.75s ease-in-out forwards;
-}
-
-.outerDot .grow {
-  animation: grow 0.5s ease-in-out forwards;
-}
-
 .innerDot .shrink {
-  animation: shrink 0.5s ease-in-out forwards;
+  transition: all 0.5s ease-in-out;
+  transform: scale(1);
 }
 
 .midDot .shrink {
-  animation: shrink 0.75s ease-in-out forwards;
+  transition: all 0.75s ease-in-out;
+  transform: scale(1);
 }
 
 .outerDot .shrink {
-  animation: shrink 1s ease-in-out forwards;
+  transition: all 1s ease-in-out;
+  transform: scale(1);
 }
 
-/* .label-line {
-  transform-origin: bottom;
-  background-color: rgb(255, 255, 255);
-  width: 2px;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
+.innerDot .grow {
+  transition: all 1s ease-in-out;
+  transform: scale(1.4);
 }
 
-.label-line-horizontal {
-  height: 2px;
-  background-color: rgb(255, 255, 255);
-  position: absolute;
-  bottom: 0;
+.midDot .grow {
+  transition: all 0.75s ease-in-out;
+  transform: scale(1.4);
 }
 
-.label-text {
-  position: absolute;
-  white-space: nowrap;
-  padding: 2px 5px;
-} */
-
-@keyframes grow {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.4);
-  }
-}
-
-@keyframes shrink {
-  0% {
-    transform: scale(1.4);
-  }
-  100% {
-    transform: scale(1);
-  }
+.outerDot .grow {
+  transition: all 0.5s ease-in-out;
+  transform: scale(1.4);
 }

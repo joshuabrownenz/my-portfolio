@@ -17,7 +17,6 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     const dialogOpen = isSection(hash);
 
     const [activeTab, setActiveTab] = React.useState<Section | null>(dialogOpen ? hash : null);
-    console.log("activeTab", activeTab);
     React.useEffect(() => {
         if (isSection(hash)) {
             setActiveTab(hash);
@@ -36,24 +35,24 @@ export const Index: React.FC<PageProps> = ({ location }) => {
             <main className="relative w-screen h-screen">
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
-                        <ProjectsDialogContent className={hash !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
-                        <MyStoryDialogContent className={hash !== "my-story" ? "hidden" : ""} />
+                        <ProjectsDialogContent className={activeTab !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
+                        <MyStoryDialogContent className={activeTab !== "my-story" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "120vh", height: "60vh" }}>
                     <div className="absolute z-50" style={{ left: "15%", top: "65%" }}>
                         <a href="/#projects">
-                            <LabelContainer angle="left45" text="Projects" />
+                            <LabelContainer angle="left45" text="Projects"  textUnderlineLength={100}/>
                         </a>
                     </div>
                     <div className="absolute z-50" style={{ top: "20%", left: "50%" }}>
                         <a href="/#my-story">
-                            <LabelContainer angle="up" text="My Story" />
+                            <LabelContainer angle="up" text="My Story" length={110} />
                         </a>
                     </div>
                     <div className="absolute z-50" style={{ top: "50%", right: "10%" }}>
                         <a href="/#experience">
-                            <LabelContainer angle="right45" text="Experience" />
+                            <LabelContainer angle="right45" text="Experience" length={90} textUnderlineLength={130}/>
                         </a>
                     </div>
                 </div>

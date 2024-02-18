@@ -11,7 +11,7 @@ type LabelContainerProps = {
     textUnderlineLength?: number;
 }
 
-export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick, length = 100, textUnderlineLength = 70 }) => {
+export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick, length = 130, textUnderlineLength = 100 }) => {
     const [active, setActive] = React.useState(false);
 
 
