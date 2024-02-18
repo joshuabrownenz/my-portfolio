@@ -64,24 +64,27 @@ export const PAGE_DATA: PageData = {
   ],
   projects: [
     {
-      title: "Database From Scratch",
-      description: "A self implemented database in Rust. This project taught me about the underlying principles of databases. Implementing B-Trees, managing pages and soon to have a basic query language.",
+      title: "Coffee Capsules 2U",
+      description:
+        "I am the active developer on the Coffee Capsules 2U website. I have implemented a number of features and improvements to the website, including a new cart system, shopify discount codes and a new product page",
       url: "https://www.coffeecapsules2u.co.nz",
-      thumbnailUrl: "/CC2U-Image.png",
-      tags: ["Rust", "Database"],
+      thumbnail: "cc2u-website",
+      tags: ["React", "E-commerce"],
+    },
+    {
+      title: "Robotic Order Fulfillment",
+      description:
+        "I designed and built this robot for Coffee Capsules 2U to end-to-end pack and fulfill orders. The robot is capable of case erecting, product picking and packing, and case sealing and palletising. It has a pack rate of 50 cases per hour. It uses a UR-10e Collaborative Robot, Python for orchestration, and a proprietary language UR-Script.",
+      url: "cc2u-robot",
+      thumbnail: "cc2u-robot",
+      tags: ["Robotics", "Automation"],
     },
     {
       title: "Database From Scratch",
-      description: "A self implemented database in Rust. This project taught me about the underlying principles of databases. Implementing B-Trees, managing pages and soon to have a basic query language.",
-      url: "https://www.coffeecapsules2u.co.nz",
-      thumbnailUrl: "/CC2U-Image.png",
-      tags: ["Rust", "Database"],
-    },
-    {
-      title: "Database From Scratch",
-      description: "A self implemented database in Rust. This project taught me about the underlying principles of databases. Implementing B-Trees, managing pages and soon to have a basic query language.",
-      url: "https://www.coffeecapsules2u.co.nz",
-      thumbnailUrl: "/CC2U-Image.png",
+      description:
+        "A self implemented database in Rust. This project taught me about the underlying principles of databases. Implementing B-Trees, managing pages and soon to have a basic query language.",
+      url: "https://github.com/joshuabrownenz/database-from-scratch",
+      thumbnail: "rust-db",
       tags: ["Rust", "Database"],
     },
   ],

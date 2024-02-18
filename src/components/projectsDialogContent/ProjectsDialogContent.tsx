@@ -16,7 +16,7 @@ export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ classNam
             <Heading variant={"large"}>
                 Featured Projects
             </Heading>
-            <div className="flex gap-11">
+            <div className="flex gap-11 h-min">
                 {projectsOnPage.map((project) => (
                     <ProjectCard key={project.title} project={project} />
                 ))}

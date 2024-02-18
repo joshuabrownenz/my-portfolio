@@ -110,7 +110,6 @@ export const LabelLineAndText: React.FC<LabelLineAndTextProps> = ({ startX = 50,
             width: '100px',
             height: '100px',
             transition: 'all 0.7s ease',
-            // transform: `scale(${active ? 1.5 : 1})`,
             transformOrigin: 'center'
         }}>
             <svg width="100" height="100" style={{ overflow: 'visible' }}>

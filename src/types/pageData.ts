@@ -25,10 +25,12 @@ export type Experience = {
   end: string;
 };
 
+export type ProjectImage = "cc2u-website" | "cc2u-robot" | "rust-db";
+
 export type Project = {
   title: string;
   description: string;
   url: string;
-  thumbnailUrl: string;
+  thumbnail: ProjectImage;
   tags: string[];
 };

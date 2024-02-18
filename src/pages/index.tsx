@@ -47,12 +47,12 @@ export const Index: React.FC<PageProps> = ({ location }) => {
                     </div>
                     <div className="absolute z-50" style={{ top: "20%", left: "50%" }}>
                         <a href="/#my-story">
-                            <LabelContainer angle="up" text="My Story" length={110} />
+                            <LabelContainer angle="up" text="My Story" lengthAt800={110} />
                         </a>
                     </div>
                     <div className="absolute z-50" style={{ top: "50%", right: "10%" }}>
                         <a href="/#experience">
-                            <LabelContainer angle="right45" text="Experience" length={90} textUnderlineLength={130}/>
+                            <LabelContainer angle="right45" text="Experience" lengthAt800={90} textUnderlineLength={130}/>
                         </a>
                     </div>
                 </div>
