@@ -215,10 +215,25 @@ const EarthPointCloud = () => {
     return delta.length();
   }
 
+  const realPointer = useRef(new Vector2(0, -2));
   const prevPointer = useRef(new Vector2(0, 0));
 
+  useEffect(() => {
+    // Normalise to canvas space. Because the canvas is full screen with 2x height. Map to x to -1 to 1 and y to -1 to 0
+    const handleMouseMove = (event: MouseEvent) => {
+      const x = (event.clientX / window.innerWidth) * 2 - 1;
+      const y = -(event.clientY / window.innerHeight) + 1;
+      realPointer.current.set(x, y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  
+  }, [])
+
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame(({ pointer }, delta) => {
+  // I am not using the pointer object as that gets blocked by components above the canvas
+  useFrame((_, delta) => {
     if (!bufferRef.current) {
       return;
     }
@@ -228,6 +243,7 @@ const EarthPointCloud = () => {
 
     rotateDestinationAroundYAxis(delta * 0.05);
 
+    const pointer = realPointer.current;
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
     if (mouseDelta > 0) {
