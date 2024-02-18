@@ -33,7 +33,7 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     return (
         <div className={cn("w-full min-h-screen md:max-h-screen md:overflow-hidden")}>
             <Header />
-            <main className="aspect-[4/3] relative">
+            <main className="relative w-screen h-screen">
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
                         <ProjectsDialogContent className={hash !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />

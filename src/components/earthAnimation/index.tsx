@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
+import { Canvas, Size, useFrame, useLoader, useThree } from "react-three-fiber";
 import {
   BufferAttribute,
   Vector2,
@@ -18,7 +18,15 @@ import {
 } from "three";
 
 const PARTICLE_COUNT = 100000;
-const SCALE = 2.5;
+
+/** Computes the scale and offsets at a given screen size */
+const getScaleAndOffset = (size: Size) => {
+  const scale = size.width < 600 ? 1.25 : 2;
+
+  const yOffset = 0
+  const offset = new Vector3(0, yOffset, 0);
+  return { scale, offset };
+}
 
 const EarthPointCloud = () => {
   // This reference will give us direct access to the mesh
@@ -28,6 +36,15 @@ const EarthPointCloud = () => {
   const velocitiesRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const originalPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
+
+  const {scale: initalScale, offset: initialOffset} = getScaleAndOffset(size);
+  const [scale, setScale] = useState(initalScale);
+  const [offset, setOffset] = useState(initialOffset);
+  useEffect(() => {
+    const { scale, offset } = getScaleAndOffset(size);
+    setScale(scale);
+    setOffset(offset);
+  }, [size])
 
   const texture = useLoader(TextureLoader, "/bump.png");
 
@@ -50,14 +67,12 @@ const EarthPointCloud = () => {
     const [points, colors] = createPointCloud(imageData);
 
     originalPositionsRef.current = points.slice();
-    currentPositionsRef.current = points.slice();
+    currentPositionsRef.current = new Float32Array(points.length)
 
     console.log(JSON.stringify(points));
     console.log(JSON.stringify(colors));
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
   }, []);
-
-  console.log("Finish");
 
   // Create the point cloud geometry based on the bump map data
   function createPointCloud(imageData: ImageData) {
@@ -105,9 +120,9 @@ const EarthPointCloud = () => {
       }
 
       // Calculate the final position of the particle
-      const x = vector.x * landElevation * SCALE;
-      const y = vector.y * landElevation * SCALE;
-      const z = vector.z * landElevation * SCALE;
+      const x = vector.x * landElevation;
+      const y = vector.y * landElevation;
+      const z = vector.z * landElevation;
 
       // Store the positions and colors in the arrays
       positions.set([x, y, z], i * 3);
@@ -230,16 +245,9 @@ const EarthPointCloud = () => {
       positions[i * 3 + 2] += velocities[i * 3 + 2] * 0.1;
 
       // Lerp back to original position
-      positions[i * 3] +=
-        (originalPositions[i * 3] - positions[i * 3]) * 0.05 * followSpeed;
-      positions[i * 3 + 1] +=
-        (originalPositions[i * 3 + 1] - positions[i * 3 + 1]) *
-        0.05 *
-        followSpeed;
-      positions[i * 3 + 2] +=
-        (originalPositions[i * 3 + 2] - positions[i * 3 + 2]) *
-        0.05 *
-        followSpeed;
+      positions[i * 3] += ((originalPositions[i * 3] + offset.x) * scale - positions[i * 3]) * 0.05 * followSpeed;
+      positions[i * 3 + 1] += ((originalPositions[i * 3 + 1] + offset.y) * scale - positions[i * 3 + 1]) * 0.05 * followSpeed;
+      positions[i * 3 + 2] += ((originalPositions[i * 3 + 2] + offset.z) * scale - positions[i * 3 + 2]) * 0.05 * followSpeed;
 
       // Damping
       velocities[i * 3] *= 0.98;
@@ -264,13 +272,6 @@ const EarthPointCloud = () => {
   // Return view, these are regular three.js elements expressed in JSX
   return (
     <>
-      <perspectiveCamera
-        fov={75}
-        aspect={size.width / size.height}
-        near={0.1}
-        far={1000}
-        position={[0, 0, 5]}
-      />
       <points>
         <bufferGeometry>
           <bufferAttribute
@@ -290,9 +291,18 @@ const EarthPointCloud = () => {
   );
 };
 
+const scale = 100; // Adjust based on your scene's scale
+const aspect = window.innerWidth / window.innerHeight;
+const frustumSize = 50; // Adjust for the size of the visible area
+
+const left = (-frustumSize * aspect) / 2;
+const right = (frustumSize * aspect) / 2;
+const top = frustumSize / 2;
+const bottom = -frustumSize / 2;
+
 export const EarthAnimation = () => {
   return (
-    <Canvas>
+    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh"}}>
       <Suspense fallback={null}>
         <EarthPointCloud />
       </Suspense>

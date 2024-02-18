@@ -5,7 +5,7 @@ import { SocialLink, Socials } from "../socials"
 
 export const Header = () => {
     return (
-        <header className="flex justify-between mt-10 mx-[var(--global-margin-x)]">
+        <header className="fixed w-full flex justify-between pt-10 px-[var(--global-margin-x)] z-50">
             <Logo />
             <div>
                 <Heading className="text-end" variant={"headerTitle"}>
