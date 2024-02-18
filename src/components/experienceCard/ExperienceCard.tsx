@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { TypographyP } from "../ui/typography";
 import { Badge } from "../ui/badge";
+import { TypographyP } from "../typography";
 
 type ExperienceCard = {
   company: string;

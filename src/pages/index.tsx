@@ -39,7 +39,7 @@ export const Index: React.FC<PageProps> = ({ location }) => {
                         <MyStoryDialogContent className={activeTab !== "my-story" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "120vh", height: "60vh" }}>
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
                     <div className="absolute z-50" style={{ left: "15%", top: "65%" }}>
                         <a href="/#projects">
                             <LabelContainer angle="left45" text="Projects"  textUnderlineLength={100}/>

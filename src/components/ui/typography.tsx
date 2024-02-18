@@ -47,11 +47,3 @@ export const TypographyH4: FC<TypographyProps> = ({ className, ...props }) => {
     />
   );
 };
-export const TypographyP: FC<TypographyProps> = ({ className, ...props }) => {
-  return (
-    <p
-      className={cn("text-muted-foreground font-normal leading-7 [&:not(:first-child)]:mt-4", className)}
-      {...props}
-    />
-  );
-};

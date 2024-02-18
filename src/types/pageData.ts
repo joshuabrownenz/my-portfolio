@@ -3,11 +3,22 @@ import { IconType } from "react-icons";
 export type PageData = {
   title: string;
   description: string;
-  blurb: string;
+  myStory: MyStory;
   socialLinks: SocialLink[];
   experience: Experience[];
   projects: Project[];
 };
+
+export type MyStory = {
+  blurb: string;
+  title: string;
+  paragraph1: string;
+  paragraph2: string;
+  paragraph3: string;
+  paragraph4: string;
+  paragraph5: string;
+  paragraph6: string;
+}
 
 export type SocialLink = {
   url: string;

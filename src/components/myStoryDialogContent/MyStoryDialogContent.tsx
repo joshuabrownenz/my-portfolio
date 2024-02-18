@@ -1,13 +1,15 @@
 import React, { FC } from "react"
-import { Heading, Typography } from "../typography";
+import { Heading, TypographyP } from "../typography";
 import { FakeLink } from "../fakeLink/FakeLink";
 import { StaticImage } from "gatsby-plugin-image";
+import { PAGE_DATA } from "@/constants";
 
 type MyStoryDialogContentProps = {
     className?: string;
 }
 
-export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({className}) => {
+export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className }) => {
+    const { myStory } = PAGE_DATA;
     return (
         <div className={className}>
             <Heading variant={"large"}>
@@ -20,25 +22,39 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({className})
                             <StaticImage src={"../../images/Headshot.png"} className="rounded-full" width={82} alt={"Headshot of Me"} />
                         </div>
                         <Heading variant={"display"} className="whitespace-pre-wrap">
-                            I build fast, powerful{" \n"}and interesting{" \n"}software.
+                            {myStory.blurb}
                         </Heading>
                     </div>
                     <FakeLink>
                         CONTACT ME
                     </FakeLink>
                 </div>
-                <div className="w-full flex flex-col gap-6 ">
+                <div className="w-full flex flex-col gap-4 ">
                     <Heading variant={"small"}>
-                        I'm a fullstack developer and future software engineer based in Auckland, New Zealand.
+                        {myStory.title}
                     </Heading>
-                    <Typography variant={"body"}>
-                        I'm currently studying a Bachelor of Computer and Information Sciences at AUT University.I'm currently working as a fullstack developer at a small startup called <a href='https://www.livewirehr.co.nz' target='_blank'>LivewireHR</a>.  I'm also a freelance developer, working with a variety of clients to build websites and web applications. I'm currently working on a few projects, including a new
-                    </Typography>
+                    <div>
+                        <TypographyP variant={"body"}>
+                            {myStory.paragraph1}
+                        </TypographyP>
+                        <TypographyP className="mt-3" variant={"body"}>
+                            {myStory.paragraph2}
+                        </TypographyP>
+                    </div>
                 </div>
                 <div className="w-full">
-                    <Typography variant={"body"}>
-                        I'm currently studying a Bachelor of Computer and Information Sciences at AUT University.I'm currently working as a fullstack developer at a small startup called <a href='https://www.livewirehr.co.nz' target='_blank'>LivewireHR</a>.  I'm also a freelance developer, working with a variety of clients to build websites and web applications. I'm currently working on a few projects, including a new website for a local business, a new website for a local charity, and a new website for a local church.
-                    </Typography>
+                    <TypographyP variant={"body"}>
+                        {myStory.paragraph3}
+                    </TypographyP>
+                    <TypographyP className="mt-3" variant={"body"}>
+                        {myStory.paragraph4}
+                    </TypographyP>
+                    <TypographyP className="mt-3" variant={"body"}>
+                        {myStory.paragraph5}
+                    </TypographyP>
+                    <TypographyP className="mt-3" variant={"body"}>
+                        {myStory.paragraph6}
+                    </TypographyP>
                 </div>
             </div>
         </div>
