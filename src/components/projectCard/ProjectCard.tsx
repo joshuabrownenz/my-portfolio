@@ -14,6 +14,7 @@ import { Link } from "gatsby";
 import { ArrowUpRight } from "lucide-react";
 import { FakeLink } from "../fakeLink/FakeLink";
 import { IStaticImageProps } from "gatsby-plugin-image/dist/src/components/static-image.server";
+import { CC2URobotVideoAnchorElement } from "../wistaVideo/CC2URobot";
 
 type ProjectCardProps = {
   project: Project;
@@ -26,7 +27,7 @@ type ProjectImageProps = Omit<IStaticImageProps, "src" | "width"> & {
 const ProjectStaticImage: FC<ProjectImageProps> = ({ type, ...props }) => {
   switch (type) {
     case "cc2u-website":
-      return <StaticImage src="../../images/CC2U-website.png" className="w-full rounded-3xl" width={544} alt="Coffee Capsules 2U Website" />
+      return <StaticImage src="../../images/CC2U-website.png" className="w-full rounded-3xl" width={544} alt="Simply Coffee Ltd Website" />
     case "cc2u-robot":
       return <StaticImage src="../../images/CC2U-robot.jpg" className="w-full rounded-3xl" width={544} alt="Robot in our Factory" />
     case "rust-db":
@@ -37,30 +38,30 @@ const ProjectStaticImage: FC<ProjectImageProps> = ({ type, ...props }) => {
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
-    <a href={project.url} target="_blank" >
-      <Card className="max-w-[544px] h-full flex flex-col justify-between">
-        <div>
-          <ProjectStaticImage type={project.thumbnail} alt={project.title} />
-          <CardHeader className="w-full">
-            <CardTitle>{project.title}</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-        </div>
-        <CardFooter>
-          <div className="flex flex-wrap gap-3 items-center h-full">
-            {project.tags.map((tag) => (
-              <Badge key={tag} variant="outline">
-                <Typography variant="badge">
-                  {tag}
-                </Typography>
-              </Badge>
-            ))}
-            <FakeLink>
-              VIEW PROJECT
-            </FakeLink>
+    <a href={project.url} target={project.thumbnail !== "cc2u-robot" ? "_blank" : undefined}>
+        <Card className="max-w-[544px] h-full flex flex-col justify-between">
+          <div>
+            <ProjectStaticImage type={project.thumbnail} alt={project.title} />
+            <CardHeader className="w-full">
+              <CardTitle>{project.title}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+            </CardHeader>
           </div>
-        </CardFooter>
-      </Card>
+          <CardFooter>
+            <div className="flex flex-wrap gap-3 items-center h-full">
+              {project.tags.map((tag) => (
+                <Badge key={tag} variant="outline">
+                  <Typography variant="badge">
+                    {tag}
+                  </Typography>
+                </Badge>
+              ))}
+              <FakeLink>
+                VIEW PROJECT
+              </FakeLink>
+            </div>
+          </CardFooter>
+        </Card>
     </a >
   );
 };

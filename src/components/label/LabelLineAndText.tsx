@@ -125,7 +125,7 @@ export const LabelLineAndText: React.FC<LabelLineAndTextProps> = ({ startX = 50,
                 <path
                     d={pathD}
                     stroke="white"
-                    strokeWidth="3"
+                    strokeWidth="1.5"
                     strokeLinecap='round'
                     fill="none"
                     style={{ transition: 'all 0.7s ease' }}

@@ -5,6 +5,8 @@ import { LabelLineAndText } from "./LabelLineAndText"; // Import the new compone
 import { useWindowSize } from "@uidotdev/usehooks";
 
 type LabelContainerProps = {
+    active: boolean;
+    setActive: (active: boolean) => void;
     angle: "up" | "right45" | "left45";
     text: string;
     onClick?: () => void;
@@ -13,8 +15,7 @@ type LabelContainerProps = {
     textUnderlineLength?: number;
 }
 
-export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick, lengthAt800 = 130, textUnderlineLength = 100 }) => {
-    const [active, setActive] = React.useState(false);
+export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, onClick, lengthAt800 = 130, textUnderlineLength = 100, active, setActive }) => {
 
     const windowSize = useWindowSize();
     const length = lengthAt800 * (windowSize?.height ?? 800) / 800;
