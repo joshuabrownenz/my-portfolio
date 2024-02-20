@@ -1,4 +1,3 @@
-import { writeFileSync } from "fs";
 import React, {
   Ref,
   Suspense,
@@ -16,6 +15,7 @@ import {
   TextureLoader,
   Color,
 } from "three";
+
 
 const PARTICLE_COUNT = 100000;
 
@@ -37,7 +37,7 @@ const EarthPointCloud = () => {
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const originalPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
 
-  const {scale: initalScale, offset: initialOffset} = getScaleAndOffset(size);
+  const { scale: initalScale, offset: initialOffset } = getScaleAndOffset(size);
   const [scale, setScale] = useState(initalScale);
   const [offset, setOffset] = useState(initialOffset);
   useEffect(() => {
@@ -69,8 +69,36 @@ const EarthPointCloud = () => {
     originalPositionsRef.current = points.slice();
     currentPositionsRef.current = new Float32Array(points.length)
 
-    console.log(JSON.stringify(points));
-    console.log(JSON.stringify(colors));
+    const download = async () => {
+      // Use CompressionStream to compress the text
+      const compressedStream = new CompressionStream('gzip');
+      const writer = compressedStream.writable.getWriter();
+      writer.write(colors.buffer);
+      writer.close();
+
+      // Read the compressed stream and convert it to a Blob
+      const reader = compressedStream.readable.getReader();
+      const chunks = [];
+      let done, value;
+      while (({ done, value } = await reader.read()) && !done) {
+        chunks.push(value);
+      }
+      const blob = new Blob(chunks, { type: 'application/octet-stream' });
+
+      // Create a URL for the Blob and trigger the download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "compressedData.bin"; // Name of the file to be downloaded
+      document.body.appendChild(a); // Append the anchor to the body
+      a.click(); // Programmatically click the anchor to trigger the download
+      document.body.removeChild(a); // Clean up
+      window.URL.revokeObjectURL(url); // Release the Blob URL
+    };
+
+    download();
+
+
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
   }, []);
 
@@ -228,7 +256,7 @@ const EarthPointCloud = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  
+
   }, [])
 
   // Subscribe this component to the render-loop, rotate the mesh every frame
@@ -309,7 +337,7 @@ const EarthPointCloud = () => {
 
 export const EarthAnimation = () => {
   return (
-    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh"}}>
+    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh" }}>
       <Suspense fallback={null}>
         <EarthPointCloud />
       </Suspense>
