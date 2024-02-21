@@ -5,19 +5,18 @@ export type PageData = {
   description: string;
   myStory: MyStory;
   socialLinks: SocialLink[];
-  experience: Experience[];
+  experience: {
+    quote: Quote;
+    jobs: Experience[];
+  };
   projects: Project[];
 };
 
 export type MyStory = {
   blurb: string;
   title: string;
-  paragraph1: string;
-  paragraph2: string;
-  paragraph3: string;
-  paragraph4: string;
-  paragraph5: string;
-  paragraph6: string;
+  column1: string[];
+  column2: string[];
 }
 
 export type SocialLink = {
@@ -27,13 +26,16 @@ export type SocialLink = {
   icon: IconType;
 };
 
+export type Quote = {
+  body: string;
+  by: string;
+};
+
 export type Experience = {
   company: string;
   role: string;
-  description: string;
-  tags: string[];
-  start: string;
-  end: string;
+  body: string;
+  timeline: string;
 };
 
 export type ProjectImage = "cc2u-website" | "cc2u-robot" | "rust-db";
@@ -44,4 +46,5 @@ export type Project = {
   url: string;
   thumbnail: ProjectImage;
   tags: string[];
+  hideFakeLink?: boolean;
 };

@@ -29,32 +29,26 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className 
                         CONTACT ME
                     </FakeLink>
                 </div>
-                <div className="w-full flex flex-col gap-4 ">
+                <div className="w-full flex flex-col gap-1">
                     <Heading variant={"small"}>
                         {myStory.title}
                     </Heading>
                     <div>
-                        <TypographyP variant={"body"}>
-                            {myStory.paragraph1}
-                        </TypographyP>
-                        <TypographyP className="mt-3" variant={"body"}>
-                            {myStory.paragraph2}
-                        </TypographyP>
+                        {myStory.column1.map((item) => (
+                            <TypographyP key={item} className="mt-3" variant={"body"}>
+                                {item}
+                            </TypographyP>
+                        ))}
                     </div>
                 </div>
                 <div className="w-full">
-                    <TypographyP variant={"body"}>
-                        {myStory.paragraph3}
-                    </TypographyP>
-                    <TypographyP className="mt-3" variant={"body"}>
-                        {myStory.paragraph4}
-                    </TypographyP>
-                    <TypographyP className="mt-3" variant={"body"}>
-                        {myStory.paragraph5}
-                    </TypographyP>
-                    <TypographyP className="mt-3" variant={"body"}>
-                        {myStory.paragraph6}
-                    </TypographyP>
+                    {myStory.column2.map((item, index) => {
+                        return (
+                            <TypographyP key={item} className={`${index !== 0 ? "mt-3" : ""}`} variant={"body"}>
+                                {item}
+                            </TypographyP>
+                        )
+                    })}
                 </div>
             </div>
         </div>

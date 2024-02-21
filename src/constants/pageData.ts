@@ -8,12 +8,16 @@ export const PAGE_DATA: PageData = {
   myStory: {
     blurb: "I build fast, powerful and interesting software",
     title: "I'm a Software Engineer based in Auckland, New Zealand.",
-    paragraph1: "My passion for software started when I was intermediate. It started simple with small python project then embedded projects on Arduino and custom circuit boards. After a while I moved to C# with Unity and that is where I realised anything is possible with code.",
-    paragraph2: "After graduating High School a year early. I was hired that summer by Simply Coffee Ltd where I was meant to work for a couple of weeks on their new robotics project.",
-    paragraph3: "I must have done something right cause I'm still here 3 years later. Working with Simply Coffee Ltd has given me so many opportunities to explore different aspects of software.",
-    paragraph4: "I've built integrations with every type of hardware imaginable. The Robot (UR-10e), custom handwriting machines, camera's galore, pneumatic systems, actuators, motors and every sensor imaginable. It was the highlight of my career, the amount of learning tinkering and problem solving was incredible!",
-    paragraph5: "After that, I moved on to managing the CC2U website and building new features and improvements improving my Web Development skills",
-    paragraph6: "Now I'm contracting for Woop Ltd and working on a new highly exciting process automation project.",
+    column1: [
+      "My passion for software started when I was intermediate. It started simple with small python project then embedded projects on Arduino and custom circuit boards. After a while I moved to C# with Unity and that is where I realised anything is possible with code.",
+      "After graduating High School a year early. I was hired that summer by Simply Coffee Ltd where I was meant to work for a couple of weeks on their new robotics project.",
+    ],
+    column2: [
+      "I must have done something right cause I'm still here 3 years later. Working with Simply Coffee Ltd has given me so many opportunities to explore different aspects of software.",
+      "I've built integrations with every type of hardware imaginable. The Robot (UR-10e), custom handwriting machines, camera's galore, pneumatic systems, actuators, motors and every sensor imaginable. It was the highlight of my career, the amount of learning tinkering and problem solving was incredible!",
+      "After that, I moved on to managing the CC2U website and building new features and improvements improving my Web Development skills",
+      "Now I'm contracting for Woop Ltd and working on a new highly exciting process automation project.",
+    ],
   },
   socialLinks: [
     {
@@ -42,40 +46,37 @@ export const PAGE_DATA: PageData = {
     },
   ],
 
-  experience: [
-    {
-      company: "LivewireHR",
-      role: "Fullstack Developer",
-      description:
-        "I'm currently working as a fullstack developer at a small startup called LivewireHR.",
-      tags: ["React", "Node.js", "TypeScript", "MongoDB"],
-      start: "2020",
-      end: "Present",
+  experience: {
+    quote: {
+      body: "The only source of knowledge is experience.",
+      by: "Albert Einstein",
     },
-    {
-      company: "Freelance",
-      role: "Fullstack Developer",
-      description:
-        "I'm also a freelance developer, working with a variety of clients to build websites and web applications.",
-      tags: ["React", "Node.js", "TypeScript", "MongoDB"],
-      start: "2020",
-      end: "Present",
-    },
-    {
-      company: "Freelance",
-      role: "Fullstack Developer",
-      description:
-        "I'm also a freelance developer, working with a variety of clients to build websites and web applications.",
-      tags: ["React", "Node.js", "TypeScript", "MongoDB"],
-      start: "2020",
-      end: "Present",
-    },
-  ],
+    jobs: [
+      {
+        company: "Simply Coffee Ltd",
+        role: "Software Engineer",
+        body: "I initially started as a Robotics Engineer, building them a end-to-end order fulfillment robot. I then moved on to managing the CC2U website and building new features and improvements. Currently, I am on standby and perform regular maintenance and updates to the robot and website.",
+        timeline: "2020 - Ongoing",
+      },
+      {
+        company: "DDSIT",
+        role: "SRE Engineer (Intern)",
+        body: "I worked part-time for DDSIT under an incredibly talented team. I was mainly responsible for helping DDSIT achieve their certification, education and training goals. In my time there DDSIT reached their Microsoft solution partner status.  ",
+        timeline: "Feb 2023 - Jul 2023",
+      },
+      {
+        company: "Woop Ltd",
+        role: "Software Engineer",
+        body: "I'm also a freelance developer, working with a variety of clients to build websites and web applications.",
+        timeline: "Dec 2023 - Ongoing",
+      },
+    ],
+  },
   projects: [
     {
-      title: "Simply Coffee Ltd",
+      title: "Coffee Capsules 2U Website",
       description:
-        "I am the active developer on the Simply Coffee Ltd website. I have implemented a number of features and improvements to the website, including a new cart system, shopify discount codes and a new product page",
+        "I am the active developer on the Coffee Capsules 2U website. I have implemented a number of features and improvements to the website, including a new cart system, shopify discount codes and a new product page",
       url: "https://www.coffeecapsules2u.co.nz",
       thumbnail: "cc2u-website",
       tags: ["React", "E-commerce"],
@@ -83,10 +84,11 @@ export const PAGE_DATA: PageData = {
     {
       title: "Robotic Order Fulfillment",
       description:
-        "I designed and built this robot for Simply Coffee Ltd to end-to-end pack and fulfill orders. The robot is capable of case erecting, product picking and packing, and case sealing and palletising. It has a pack rate of 50 cases per hour. It uses a UR-10e Collaborative Robot, Python for orchestration, and a proprietary language UR-Script.",
+        "I designed and built this robot for Simply Coffee Ltd to end-to-end pack and fulfill orders. The robot is capable of case erecting, product picking and packing, and case sealing and palletising. It uses a UR-10e Collaborative Robot, Python for orchestration, and Universal Robots proprietary language URScript.",
       url: "#robot-video",
       thumbnail: "cc2u-robot",
       tags: ["Robotics", "Automation"],
+      hideFakeLink: true,
     },
     {
       title: "Database From Scratch",

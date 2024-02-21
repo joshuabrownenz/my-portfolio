@@ -8,46 +8,25 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { TypographyP } from "../typography";
-
-type ExperienceCard = {
-  company: string;
-  role: string;
-  description: string;
-  tags: string[];
-
-  start: string;
-  end: string;
-};
+import { Heading, TypographyP } from "../typography";
+import { Experience } from "@/types";
+import { Header } from "../header/Header";
 
 type ExperienceCardProps = {
-  data: ExperienceCard;
+  job: Experience;
 };
 
-export const ExperienceCard: React.FC<ExperienceCardProps> = ({ data }) => {
+export const ExperienceCard: React.FC<ExperienceCardProps> = ({ job }) => {
   return (
-    <Card className="flex">
-      <CardHeader className="pr-0">
-        <TypographyP>
-          {data.start} - {data.end}
-        </TypographyP>
+    <Card className="max-w-[544px] h-full flex flex-col justify-between">
+      <CardHeader className="w-full">
+        <CardDescription>{job.timeline}</CardDescription>
+        <CardTitle>{job.company}</CardTitle>
+        <Heading variant="small">{job.role}</Heading>
       </CardHeader>
-      <div className="[&>]:pl-0">
-        <CardHeader>
-          <CardTitle>{data.company}</CardTitle>
-          <CardDescription>{data.role}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <TypographyP>{data.description}</TypographyP>
-        </CardContent>
-        <CardFooter>
-          <div className="flex flex-wrap gap-2">
-            {data.tags.map((tag) => (
-              <Badge key={tag} variant="secondary">{tag}</Badge>
-            ))}
-          </div>
-        </CardFooter>
-      </div>
+      <CardContent>
+        <TypographyP>{job.body}</TypographyP>
+      </CardContent>
     </Card>
   );
 };

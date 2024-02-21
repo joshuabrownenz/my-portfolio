@@ -11,7 +11,7 @@ export const CC2URobotVideoAnchorElementHead = () => {
 
 
 export const CC2URobotVideoAnchorElement: FC = () => {
-    return <span className="wistia_embed wistia_async_0j68w1e4ch popover=true popoverContent=link videoFoam=false" style={{ display: "inline-block", }}></span>
+    return <span className="wistia_embed wistia_async_0j68w1e4ch popover=true popoverContent=link videoFoam=true" style={{ display: "inline-block", }}></span>
 
 
 }

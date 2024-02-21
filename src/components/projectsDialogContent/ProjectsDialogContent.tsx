@@ -2,15 +2,15 @@ import React, { FC } from "react"
 import { Project } from "@/types";
 import { ProjectCard } from "../projectCard/ProjectCard";
 import { Heading } from "../typography";
+import { PAGE_DATA } from "@/constants";
 
 
 type ProjectsDialogContentProps = {
     className?: string;
-    projects: Project[];
 }
 
-export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ className, projects }) => {
-    const projectsOnPage = projects.slice(0, 3);
+export const ProjectsDialogContent: FC<ProjectsDialogContentProps> = ({ className }) => {
+    const projectsOnPage = PAGE_DATA.projects.slice(0, 3);
     return (
         <div className={className}>
             <Heading variant={"large"}>

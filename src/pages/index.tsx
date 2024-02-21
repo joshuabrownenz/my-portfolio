@@ -3,12 +3,12 @@ import { cn } from "../lib/utils";
 import { EarthAnimation } from "@/components/earthAnimation";
 import { LabelContainer } from "@/components/label/LabelContainer";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { PAGE_DATA } from "@/constants";
 import { ProjectsDialogContent } from "@/components/projectsDialogContent/ProjectsDialogContent";
 import { Header } from "@/components/header/Header";
 import { MyStoryDialogContent } from "@/components/myStoryDialogContent/MyStoryDialogContent";
 import { PageProps, navigate } from "gatsby";
 import { CC2URobotVideoAnchorElement, CC2URobotVideoAnchorElementHead } from "@/components/wistaVideo/CC2URobot";
+import { ExperienceDialogContent } from "@/components/experienceDialogContent/ExperienceDialogContent";
 
 declare global {
     interface Window {
@@ -51,7 +51,8 @@ export const Index: React.FC<PageProps> = ({ location }) => {
             window._wq = window._wq || [];
             window._wq.push({
                 id: "_all", onReady: function (video: any) {
-                    video.popover.show()
+                    video.popover.show();
+                    video.play();
                 }
             });
         }
@@ -59,13 +60,6 @@ export const Index: React.FC<PageProps> = ({ location }) => {
 
     React.useEffect(() => {
         window._wq = window._wq || [];
-        window._wq.push({
-            id: "_all", onReady: function (video: any) {
-                video.bind("play", function () {
-                    console.log("Test Play")
-                })
-            }
-        });
         window._wq.push({
             id: "_all", onReady: function (video: any) {
                 video.bind("popoverhide", function () {
@@ -87,8 +81,9 @@ export const Index: React.FC<PageProps> = ({ location }) => {
             <main className="relative w-screen h-screen">
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
-                        <ProjectsDialogContent className={activeTab !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
+                        <ProjectsDialogContent className={activeTab !== "projects" ? "hidden" : ""} />
                         <MyStoryDialogContent className={activeTab !== "my-story" ? "hidden" : ""} />
+                        <ExperienceDialogContent className={activeTab !== "experience" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
                 <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
