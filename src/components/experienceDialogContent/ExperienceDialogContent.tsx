@@ -14,19 +14,11 @@ export const ExperienceDialogContent: FC<ExperienceDialogContentProps> = ({ clas
     const { quote, jobs } = PAGE_DATA.experience;
     return (
         <div className={className}>
-            <Heading variant={"large"}>
+            <Heading className="" variant={"large"}>
                 Experience
             </Heading>
-            <div className="mt-8 flex gap-2">
-                {/* <div className="flex flex-col justify-between my-4">
-                    <Heading variant={"display"} className="whitespace-pre-wrap w-[350px] text-[42px] leading-[1.1]">
-                        {quote.body}
-                    </Heading>
-                    <Heading variant={"display"} className="whitespace-pre-wrap text-sm font-light">
-                        -{quote.by}
-                    </Heading>
-                </div> */}
-                <div className="w-full flex flex-col flex-col-reverse md:ml-2 md:grid md:grid-cols-3 gap-2">
+            <div className="mt-8 flex gap-2 ml-[-16px]">
+                <div className="w-full flex flex-col flex-col-reverse md:grid md:grid-cols-3 gap-2">
                     {jobs.map((job) => (
                         <ExperienceCard key={job.company} job={job} />
                     ))}

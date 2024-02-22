@@ -15,8 +15,6 @@ export const PAGE_DATA: PageData = {
     column2: [
       "I must have done something right cause I'm still here 3 years later. Working with Simply Coffee Ltd has given me so many opportunities to explore different aspects of software.",
       "I've built integrations with every type of hardware imaginable. The Robot (UR-10e), custom handwriting machines, camera's galore, pneumatic systems, actuators, motors and every sensor imaginable. It was the highlight of my career, the amount of learning tinkering and problem solving was incredible!",
-      "After that, I moved on to managing the CC2U website and building new features and improvements improving my Web Development skills",
-      "Now I'm contracting for Woop Ltd and working on a new highly exciting process automation project.",
     ],
   },
   socialLinks: [

@@ -25,7 +25,8 @@ export const headingVariants = cva("font-manrope scroll-m-20", {
 export const typographyVariants = cva("font-gibson", {
   variants: {
     variant: {
-      body: "text-md text-muted-foreground",
+      myStoryBody: "md:text-sm xl:text-base text-muted-foreground",
+      body: " md:text-sm lg:text-base text-muted-foreground",
       badge: "text-xs leading-[24px] uppercase font-extrabold",
     },
     variantColor: {

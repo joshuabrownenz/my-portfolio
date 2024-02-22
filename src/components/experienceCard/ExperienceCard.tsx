@@ -25,7 +25,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ job }) => {
         <Heading variant="xSmall">{job.role}</Heading>
       </CardHeader>
       <CardContent className="">
-        <TypographyP className="md:text-xs lg:text-sm" variant={"body"}>{job.body}</TypographyP>
+        <TypographyP className="" variant={"body"}>{job.body}</TypographyP>
       </CardContent>
     </Card>
   );

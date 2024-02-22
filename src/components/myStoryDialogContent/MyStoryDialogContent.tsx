@@ -15,40 +15,42 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className 
             <Heading variant={"large"}>
                 My Story
             </Heading>
-            <div className="flex gap-11 min-h-96 mt-6">
+            <div className="flex flex-col md:flex-row gap-6 min-h-96 mt-6">
                 <div className="w-full flex flex-col justify-between">
                     <div className="flex flex-col gap-6">
                         <div>
                             <StaticImage src={"../../images/Headshot.png"} className="rounded-full" width={82} alt={"Headshot of Me"} />
                         </div>
-                        <Heading variant={"display"} className="whitespace-pre-wrap min-w-[350px]">
+                        <Heading variant={"display"} className="whitespace-pre-wrap lg:min-w-[350px]">
                             {myStory.blurb}
                         </Heading>
                     </div>
-                    <FakeLink>
+                    {/* <FakeLink>
                         CONTACT ME
-                    </FakeLink>
+                    </FakeLink> */}
                 </div>
-                <div className="w-full flex flex-col gap-1">
-                    <Heading variant={"small"}>
-                        {myStory.title}
-                    </Heading>
-                    <div>
-                        {myStory.column1.map((item) => (
-                            <TypographyP key={item} className="mt-3" variant={"body"}>
-                                {item}
-                            </TypographyP>
-                        ))}
+                <div className="xl:flex xl:gap-6">
+                    <div className="w-full flex flex-col gap-1 mt-4">
+                        <Heading variant={"small"}>
+                            {myStory.title}
+                        </Heading>
+                        <div>
+                            {myStory.column1.map((item) => (
+                                <TypographyP key={item} className="mt-3" variant={"myStoryBody"}>
+                                    {item}
+                                </TypographyP>
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div className="w-full">
-                    {myStory.column2.map((item, index) => {
-                        return (
-                            <TypographyP key={item} className={`${index !== 0 ? "mt-3" : ""}`} variant={"body"}>
-                                {item}
-                            </TypographyP>
-                        )
-                    })}
+                    <div className="w-full mt-4">
+                        {myStory.column2.map((item, index) => {
+                            return (
+                                <TypographyP key={item} className={`${index !== 0 ? "mt-3" : ""}`} variant={"myStoryBody"}>
+                                    {item}
+                                </TypographyP>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
