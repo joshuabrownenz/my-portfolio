@@ -46,6 +46,39 @@ const EarthPointCloud = () => {
     setOffset(offset);
   }, [size])
 
+  useMemo(async () => {
+    const download = async () => {
+      const urlBackToBlob = await (await fetch("/points")).blob()
+
+      // // Decompress
+      // const decompressedStream = urlBackToBlob.stream().pipeThrough(new DecompressionStream('gzip'));
+      // const dReader = decompressedStream.getReader();
+      // const dChunks = [];
+      // let chunk;
+      // while (!(chunk = await dReader.read()).done) {
+      //   dChunks.push(chunk.value);
+      // }
+      // const concatenatedChunks = concatenateUint8Arrays(dChunks);
+      const decompressedPoints = new Float32Array(await urlBackToBlob.arrayBuffer());
+
+      console.log("Downloaded")
+      
+    };
+
+    function concatenateUint8Arrays(chunks: any[]) {
+      let totalLength = chunks.reduce((acc, value) => acc + value.length, 0);
+      let result = new Uint8Array(totalLength);
+      let length = 0;
+      for (let array of chunks) {
+        result.set(array, length);
+        length += array.length;
+      }
+      return result;
+    }
+
+    download();
+  }, [])
+
   const texture = useLoader(TextureLoader, "/bump.png");
 
   const [followSpeed, setFollowSpeed] = useState(1);
@@ -69,34 +102,7 @@ const EarthPointCloud = () => {
     originalPositionsRef.current = points.slice();
     currentPositionsRef.current = new Float32Array(points.length)
 
-    const download = async () => {
-      // Use CompressionStream to compress the text
-      const compressedStream = new CompressionStream('gzip');
-      const writer = compressedStream.writable.getWriter();
-      writer.write(colors.buffer);
-      writer.close();
-
-      // Read the compressed stream and convert it to a Blob
-      const reader = compressedStream.readable.getReader();
-      const chunks = [];
-      let done, value;
-      while (({ done, value } = await reader.read()) && !done) {
-        chunks.push(value);
-      }
-      const blob = new Blob(chunks, { type: 'application/octet-stream' });
-
-      // Create a URL for the Blob and trigger the download
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "compressedData.bin"; // Name of the file to be downloaded
-      document.body.appendChild(a); // Append the anchor to the body
-      a.click(); // Programmatically click the anchor to trigger the download
-      document.body.removeChild(a); // Clean up
-      window.URL.revokeObjectURL(url); // Release the Blob URL
-    };
-
-    download();
+    console.log("Created")
 
 
     return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
