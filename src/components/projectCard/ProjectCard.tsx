@@ -47,14 +47,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <ProjectStaticImage type={project.thumbnail} alt={project.title} />
           <CardHeader className="w-full">
             <CardTitle>{project.title}</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
+            <CardDescription className="lg:text-xs xl:text-xs 2xl:text-sm">{project.description}</CardDescription>
           </CardHeader>
         </div>
         <CardFooter className="flex justify-between">
-          <div className="flex flex-wrap gap-3 items-center h-full">
+          <div className="flex flex-wrap gap-3 items-center h-full lg:max-2xl:[&>:last-child]:hidden">
             {project.tags.map((tag) => (
               <Badge key={tag} variant="outline">
-                <Typography variant="badge">
+                <Typography className="text-micro font-semibold" variant="badge">
                   {tag}
                 </Typography>
               </Badge>

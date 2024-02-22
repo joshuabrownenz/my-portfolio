@@ -22,6 +22,9 @@ module.exports = {
       "mango-grotesque": ["MangoGrotesque", "sans-serif"],
     },
     extend: {
+      fontSize: {
+        micro: "0.625rem",
+      },
       colors: {
         border: "var(--border)",
         input: "var(--input)",

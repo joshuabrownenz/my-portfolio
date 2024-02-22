@@ -17,7 +17,7 @@ export const ExperienceDialogContent: FC<ExperienceDialogContentProps> = ({ clas
             <Heading className="" variant={"large"}>
                 Experience
             </Heading>
-            <div className="mt-8 flex gap-2 ml-[-16px]">
+            <div className="mt-6 flex gap-2 ml-[-16px]">
                 <div className="w-full flex flex-col flex-col-reverse md:grid md:grid-cols-3 gap-2">
                     {jobs.map((job) => (
                         <ExperienceCard key={job.company} job={job} />
