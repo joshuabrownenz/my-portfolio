@@ -18,14 +18,14 @@ type ExperienceCardProps = {
 
 export const ExperienceCard: React.FC<ExperienceCardProps> = ({ job }) => {
   return (
-    <Card className="max-w-[544px] h-full flex flex-col justify-between">
-      <CardHeader className="w-full">
+    <Card className="max-w-[544px] flex-1 h-full flex flex-col">
+      <CardHeader className="w-full pt-0 pb-2">
         <CardDescription>{job.timeline}</CardDescription>
         <CardTitle>{job.company}</CardTitle>
-        <Heading variant="small">{job.role}</Heading>
+        <Heading variant="xSmall">{job.role}</Heading>
       </CardHeader>
-      <CardContent>
-        <TypographyP>{job.body}</TypographyP>
+      <CardContent className="">
+        <TypographyP className="md:text-xs lg:text-sm" variant={"body"}>{job.body}</TypographyP>
       </CardContent>
     </Card>
   );

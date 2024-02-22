@@ -52,7 +52,7 @@ export const Index: React.FC<PageProps> = ({ location }) => {
             window._wq.push({
                 id: "_all", onReady: function (video: any) {
                     video.popover.show();
-                    video.play();
+                    // video.play();
                 }
             });
         }

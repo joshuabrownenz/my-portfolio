@@ -9,9 +9,15 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
     href: "/fonts/MangoGrotesque-Bold.woff2",
     as: "font",
     type: "font/woff2",
-    crossOrigin: "anonymous",
+    crossOrigin: true,
     key: "MangoGrotesque",
   });
 
-  setHeadComponents([link]);
+  const earth = React.createElement("link", {
+    rel: "preload",
+    href: "/bump.png",
+    as: "image",
+  });
+
+  setHeadComponents([link, earth]);
 };

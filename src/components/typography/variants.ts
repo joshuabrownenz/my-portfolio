@@ -7,6 +7,7 @@ export const headingVariants = cva("font-manrope scroll-m-20", {
       headerTitle: "text-xl font-semi-bold tracking-[0.453px]",
       large: "text-4xl tracking-[-1px] font-bold capitalize",
       small: "text-2xl font-semibold",
+      xSmall: "text-lg font-semibold text-muted-foreground",
     },
     marginBottom: {
       large: "mb-8",

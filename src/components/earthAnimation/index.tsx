@@ -310,9 +310,9 @@ const EarthPointCloud = () => {
 export const EarthAnimation = () => {
   return (
     <Canvas className="w-screen overflow-hidden" style={{ height: "200vh"}}>
-      <Suspense fallback={null}>
+      {/* <Suspense fallback={null}> */}
         <EarthPointCloud />
-      </Suspense>
+      {/* </Suspense> */}
     </Canvas>
   );
 };

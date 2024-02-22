@@ -88,7 +88,7 @@ export const PAGE_DATA: PageData = {
       url: "#robot-video",
       thumbnail: "cc2u-robot",
       tags: ["Robotics", "Automation"],
-      hideFakeLink: true,
+      linkText: "Watch Video",
     },
     {
       title: "Database From Scratch",

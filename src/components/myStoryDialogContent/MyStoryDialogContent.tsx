@@ -21,7 +21,7 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className 
                         <div>
                             <StaticImage src={"../../images/Headshot.png"} className="rounded-full" width={82} alt={"Headshot of Me"} />
                         </div>
-                        <Heading variant={"display"} className="whitespace-pre-wrap">
+                        <Heading variant={"display"} className="whitespace-pre-wrap min-w-[350px]">
                             {myStory.blurb}
                         </Heading>
                     </div>

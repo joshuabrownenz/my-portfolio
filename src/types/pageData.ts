@@ -47,4 +47,5 @@ export type Project = {
   thumbnail: ProjectImage;
   tags: string[];
   hideFakeLink?: boolean;
+  linkText?: string;
 };

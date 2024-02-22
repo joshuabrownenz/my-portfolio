@@ -50,7 +50,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <CardDescription>{project.description}</CardDescription>
           </CardHeader>
         </div>
-        <CardFooter>
+        <CardFooter className="flex justify-between">
           <div className="flex flex-wrap gap-3 items-center h-full">
             {project.tags.map((tag) => (
               <Badge key={tag} variant="outline">
@@ -59,10 +59,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 </Typography>
               </Badge>
             ))}
-            {!project.hideFakeLink &&<FakeLink>
-              VIEW PROJECT
-            </FakeLink>}
           </div>
+          {!project.hideFakeLink && <FakeLink>
+            {project.linkText || "VIEW PROJECT"}
+          </FakeLink>}
         </CardFooter>
       </Card>
     </a >
