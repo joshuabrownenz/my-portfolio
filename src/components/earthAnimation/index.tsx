@@ -1,13 +1,13 @@
-import { writeFileSync } from "fs";
 import React, {
+  FC,
   Ref,
   Suspense,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import { Canvas, Size, useFrame, useLoader, useThree } from "react-three-fiber";
+import { Canvas, Size, useFrame, useThree } from "react-three-fiber";
+import { useTexture } from "@react-three/drei";
 import {
   BufferAttribute,
   Vector2,
@@ -16,6 +16,7 @@ import {
   TextureLoader,
   Color,
 } from "three";
+
 
 const PARTICLE_COUNT = 100000;
 
@@ -28,7 +29,11 @@ const getScaleAndOffset = (size: Size) => {
   return { scale, offset };
 }
 
-const EarthPointCloud = () => {
+type EarthPointCloudProps = {
+  setLoaded: () => void;
+}
+
+const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
   // This reference will give us direct access to the mesh
   const { camera, size } = useThree();
   const bufferRef: Ref<BufferAttribute> = useRef(null);
@@ -37,20 +42,23 @@ const EarthPointCloud = () => {
   const currentPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
   const originalPositionsRef = useRef(new Float32Array(PARTICLE_COUNT * 3));
 
-  const {scale: initalScale, offset: initialOffset} = getScaleAndOffset(size);
-  const [scale, setScale] = useState(initalScale);
+  const { scale: initialScale, offset: initialOffset } = getScaleAndOffset(size);
+  const [scale, setScale] = useState(initialScale);
   const [offset, setOffset] = useState(initialOffset);
   useEffect(() => {
     const { scale, offset } = getScaleAndOffset(size);
     setScale(scale);
     setOffset(offset);
-  }, [size])
+  }, [size]);
 
-  const texture = useLoader(TextureLoader, "/bump.png");
+  const texture = useTexture("/bump.jpg");
 
   const [followSpeed, setFollowSpeed] = useState(1);
 
-  const [positions, colors] = useMemo(() => {
+  const [positions, setPositions] = useState<BufferAttribute | null>(null);
+  const [colors, setColors] = useState<BufferAttribute | null>(null);
+
+  useEffect(() => {
     // Create a canvas to read pixel data from the texture
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
@@ -67,11 +75,17 @@ const EarthPointCloud = () => {
     const [points, colors] = createPointCloud(imageData);
 
     originalPositionsRef.current = points.slice();
-    currentPositionsRef.current = new Float32Array(points.length)
+    const scaledPositions = points.slice();
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      scaledPositions[i * 3] = (points[i * 3] + offset.x) * scale;
+      scaledPositions[i * 3 + 1] = (points[i * 3 + 1] + offset.y) * scale;
+      scaledPositions[i * 3 + 2] = (points[i * 3 + 2] + offset.z) * scale;
+    }
+    currentPositionsRef.current = scaledPositions.slice();
 
-    console.log(JSON.stringify(points));
-    console.log(JSON.stringify(colors));
-    return [new BufferAttribute(points, 3), new BufferAttribute(colors, 3)];
+    setPositions(new BufferAttribute(points, 3));
+    setColors(new BufferAttribute(colors, 3));
+    setLoaded();
   }, []);
 
   // Create the point cloud geometry based on the bump map data
@@ -113,7 +127,7 @@ const EarthPointCloud = () => {
       // Set the color and elevation for land and ocean
       let color = new Color(0x6f9b59); // Green for land
       let landElevation = 1.05; // Slightly elevated for land
-      if (bumpValue > 0) {
+      if (bumpValue > 50) {
         // If the bump map value indicates ocean
         landElevation = 1;
         color = new Color(0x2d467f); // Blue for ocean
@@ -228,7 +242,7 @@ const EarthPointCloud = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  
+
   }, [])
 
   // Subscribe this component to the render-loop, rotate the mesh every frame
@@ -246,7 +260,7 @@ const EarthPointCloud = () => {
     const pointer = realPointer.current;
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
-    if (mouseDelta > 0) {
+    if (mouseDelta > 0 && size.width > 768) {
       repelPointsFromMouse(pointer, 0.15, 3, mouseDelta);
     }
 
@@ -285,6 +299,10 @@ const EarthPointCloud = () => {
     bufferRef.current.needsUpdate = true;
   });
 
+  if (!positions || !colors) {
+    return null;
+  }
+
   // Return view, these are regular three.js elements expressed in JSX
   return (
     <>
@@ -307,12 +325,16 @@ const EarthPointCloud = () => {
   );
 };
 
-export const EarthAnimation = () => {
+type EarthAnimationProps = {
+  setLoaded: () => void;
+};
+
+export const EarthAnimation: FC<EarthAnimationProps> = ({ setLoaded }) => {
   return (
-    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh"}}>
-      {/* <Suspense fallback={null}> */}
-        <EarthPointCloud />
-      {/* </Suspense> */}
+    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh" }}>
+      <Suspense fallback={null}>
+        <EarthPointCloud setLoaded={setLoaded} />
+      </Suspense>
     </Canvas>
   );
 };

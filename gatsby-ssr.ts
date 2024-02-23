@@ -17,7 +17,8 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
     rel: "preload",
     href: "/bump.png",
     as: "image",
-    key: "earth",
+    crossOrigin: "use-credentials",
+    key: "Earth",
   });
 
   setHeadComponents([link, earth]);

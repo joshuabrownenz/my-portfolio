@@ -84,7 +84,8 @@
     @apply scroll-smooth;
   }
   body {
-    @apply bg-primary text-primary-foreground;
+    @apply bg-black text-primary-foreground;
+    @apply md:overflow-hidden;
     @apply font-manrope;
   }
 }
