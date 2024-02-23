@@ -22,6 +22,13 @@ const isSection = (section: string): section is Section => ["my-story", "experie
 export const Index: React.FC<PageProps> = ({ location }) => {
     const hash = location.hash.slice(1);
     const dialogOpen = isSection(hash);
+    const [loaded, setLoaded] = React.useState(false);
+
+    React.useEffect(() => {
+        if (loaded) {
+            document.body.style.background = "var(--primary)"
+        }
+    }, [loaded])
 
     const [activeTab, setActiveTab] = React.useState<Section | null>(dialogOpen ? hash : null);
 
@@ -84,32 +91,28 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     return (
         <div className={cn("w-full min-h-screen md:max-h-screen md:overflow-hidden")}>
             <Header />
-            <main className="relative w-screen h-screen">
+            <main className={`relative w-screen h-screen ${!loaded ? "bg-black/100" : ""}`}>
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
                         <ProjectsDialogContent className={activeTab !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
                         <MyStoryDialogContent className={activeTab !== "my-story" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
-                    <div className={`absolute ${raisedLink === "projects" ? "z-50" : "z-40"}`} style={{ left: "15%", top: "65%" }}>
-                        <a href="/#projects">
-                            <LabelContainer angle="left45" text="Projects" textUnderlineLength={100} active={hoveredLinkOne} setActive={setHoveredLinkOne} />
-                        </a>
+                {loaded &&
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
+                        <div className={`absolute ${raisedLink === "projects" ? "z-50" : "z-40"}`} style={{ left: "15%", top: "65%" }}>
+                            <LabelContainer angle="left45" text="Projects" textUnderlineLength={100} active={hoveredLinkOne} setActive={setHoveredLinkOne} href="/#projects" />
+                        </div>
+                        <div className={`absolute ${raisedLink === "my-story" ? "z-50" : "z-40"}`} style={{ top: "20%", left: "50%" }}>
+                            <LabelContainer angle="up" text="My Story" lengthAt800={110} active={hoveredLinkTwo} setActive={setHoveredLinkTwo} href="/#my-story" />
+                        </div>
+                        <div className={`absolute ${raisedLink === "experience" ? "z-50" : "z-40"}`} style={{ top: "50%", right: "10%" }}>
+                            <LabelContainer angle="right45" text="Experience" lengthAt800={90} textUnderlineLength={130} active={hoveredLinkThree} setActive={setHoveredLinkThree} href="/#experience" />
+                        </div>
                     </div>
-                    <div className={`absolute ${raisedLink === "my-story" ? "z-50" : "z-40"}`} style={{ top: "20%", left: "50%" }}>
-                        <a href="/#my-story">
-                            <LabelContainer angle="up" text="My Story" lengthAt800={110} active={hoveredLinkTwo} setActive={setHoveredLinkTwo} />
-                        </a>
-                    </div>
-                    <div className={`absolute ${raisedLink === "experience" ? "z-50" : "z-40"}`} style={{ top: "50%", right: "10%" }}>
-                        <a href="/#experience">
-                            <LabelContainer angle="right45" text="Experience" lengthAt800={90} textUnderlineLength={130} active={hoveredLinkThree} setActive={setHoveredLinkThree} />
-                        </a>
-                    </div>
-                </div>
-                <div className={`absolute z-40 h-screen w-screen pointer-events-none transition-all duration-700 ${activeOverlay ? "bg-black/60" : ""}`} />
-                <EarthAnimation />
+                }
+                <div className={`absolute z-40 h-screen w-screen pointer-events-none transition-all duration-700 ${activeOverlay ? "bg-black/60" : ""} ${!loaded ? "bg-black/100" : ""}`} />
+                <EarthAnimation setLoaded={() => setLoaded(true)} />
                 <CC2URobotVideoAnchorElement />
             </main>
 
