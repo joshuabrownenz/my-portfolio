@@ -3,11 +3,11 @@ import React, {
   Ref,
   Suspense,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import { Canvas, Size, useFrame, useLoader, useThree } from "react-three-fiber";
+import { Canvas, Size, useFrame, useThree } from "react-three-fiber";
+import { useTexture } from "@react-three/drei";
 import {
   BufferAttribute,
   Vector2,
@@ -51,7 +51,7 @@ const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
     setOffset(offset);
   }, [size]);
 
-  const texture = useLoader(TextureLoader, "/bump.png");
+  const texture = useTexture("/bump.jpg");
 
   const [followSpeed, setFollowSpeed] = useState(1);
 
@@ -127,7 +127,7 @@ const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
       // Set the color and elevation for land and ocean
       let color = new Color(0x6f9b59); // Green for land
       let landElevation = 1.05; // Slightly elevated for land
-      if (bumpValue > 0) {
+      if (bumpValue > 50) {
         // If the bump map value indicates ocean
         landElevation = 1;
         color = new Color(0x2d467f); // Blue for ocean
@@ -260,7 +260,7 @@ const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
     const pointer = realPointer.current;
     const mouseDelta = calculateMouseDelta(prevPointer.current, pointer);
     prevPointer.current = pointer.clone();
-    if (mouseDelta > 0) {
+    if (mouseDelta > 0 && size.width > 768) {
       repelPointsFromMouse(pointer, 0.15, 3, mouseDelta);
     }
 
@@ -332,7 +332,9 @@ type EarthAnimationProps = {
 export const EarthAnimation: FC<EarthAnimationProps> = ({ setLoaded }) => {
   return (
     <Canvas className="w-screen overflow-hidden" style={{ height: "200vh" }}>
-      <EarthPointCloud setLoaded={setLoaded} />
+      <Suspense fallback={null}>
+        <EarthPointCloud setLoaded={setLoaded} />
+      </Suspense>
     </Canvas>
   );
 };

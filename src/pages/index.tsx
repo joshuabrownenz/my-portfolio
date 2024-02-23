@@ -89,9 +89,9 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     }
 
     return (
-        <div className={cn("w-full min-h-screen md:max-h-screen md:overflow-hidden")}>
+        <div className={cn("w-full min-h-screen max-h-screen")}>
             <Header />
-            <main className={`relative w-screen h-screen ${!loaded ? "bg-black/100" : ""} overflow-hidden`}>
+            <main className={`relative w-screen h-screen ${!loaded ? "bg-black/100" : ""}`}>
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
                     <DialogContent className="container">
                         <ProjectsDialogContent className={activeTab !== "projects" ? "hidden" : ""} projects={PAGE_DATA.projects} />
