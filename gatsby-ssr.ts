@@ -9,7 +9,7 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
     href: "/fonts/MangoGrotesque-Bold.woff2",
     as: "font",
     type: "font/woff2",
-    crossOrigin: true,
+    crossOrigin: "anonymous",
     key: "MangoGrotesque",
   });
 
@@ -17,6 +17,7 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
     rel: "preload",
     href: "/bump.png",
     as: "image",
+    key: "earth",
   });
 
   setHeadComponents([link, earth]);
