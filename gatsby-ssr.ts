@@ -15,9 +15,8 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
 
   const earth = React.createElement("link", {
     rel: "preload",
-    href: "/points",
-    as: "fetch",
-    type: "font/woff2",
+    href: "/bump.png",
+    as: "image",
     crossOrigin: "anonymous",
     key: "Earth",
   });

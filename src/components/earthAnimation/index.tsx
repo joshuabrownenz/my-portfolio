@@ -49,40 +49,7 @@ const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
     const { scale, offset } = getScaleAndOffset(size);
     setScale(scale);
     setOffset(offset);
-  }, [size])
-
-  useMemo(async () => {
-    const download = async () => {
-      const urlBackToBlob = await (await fetch("/points")).blob()
-
-      // // Decompress
-      // const decompressedStream = urlBackToBlob.stream().pipeThrough(new DecompressionStream('gzip'));
-      // const dReader = decompressedStream.getReader();
-      // const dChunks = [];
-      // let chunk;
-      // while (!(chunk = await dReader.read()).done) {
-      //   dChunks.push(chunk.value);
-      // }
-      // const concatenatedChunks = concatenateUint8Arrays(dChunks);
-      const decompressedPoints = new Float32Array(await urlBackToBlob.arrayBuffer());
-
-      console.log("Downloaded")
-
-    };
-
-    function concatenateUint8Arrays(chunks: any[]) {
-      let totalLength = chunks.reduce((acc, value) => acc + value.length, 0);
-      let result = new Uint8Array(totalLength);
-      let length = 0;
-      for (let array of chunks) {
-        result.set(array, length);
-        length += array.length;
-      }
-      return result;
-    }
-
-    download();
-  }, [])
+  }, [size]);
 
   const texture = useLoader(TextureLoader, "/bump.png");
 

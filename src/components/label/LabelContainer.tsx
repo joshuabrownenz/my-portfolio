@@ -21,11 +21,12 @@ export const LabelContainer: React.FC<LabelContainerProps> = ({ angle, text, len
     const length = lengthAt800 * (windowSize?.height ?? 800) / 800;
 
     useEffect(() => {
-        setLoaded(true);
+        setTimeout(() => setLoaded(true), 500);
     }, [])
 
     return (
         <a href={href}
+            className={`${!loaded ? "opacity-0" : ""} transition-opacity duration-700`}
             onFocus={(e) => {
                 setActive(true)
             }}
