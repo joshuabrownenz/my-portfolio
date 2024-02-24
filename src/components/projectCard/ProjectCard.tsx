@@ -51,16 +51,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           </CardHeader>
         </div>
         <CardFooter className="flex justify-between">
-          <div className="flex flex-wrap gap-3 items-center h-full lg:max-2xl:[&>:last-child]:hidden">
+          <div className="flex flex-wrap gap-1 min-[430px]:gap-3 lg:max-2xl:gap-1 items-center h-full">
             {project.tags.map((tag) => (
               <Badge key={tag} variant="outline">
-                <Typography className="text-micro font-semibold" variant="badge">
+                <Typography className="max-[430px]:text-[10px] lg:max-2xl:text-[10px] font-semibold" variant="badge">
                   {tag}
                 </Typography>
               </Badge>
             ))}
           </div>
-          {!project.hideFakeLink && <FakeLink>
+          {!project.hideFakeLink && <FakeLink className="">
             {project.linkText || "VIEW PROJECT"}
           </FakeLink>}
         </CardFooter>

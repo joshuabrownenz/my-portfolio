@@ -15,10 +15,10 @@ export const onRenderBody: GatsbySSR["onRenderBody"] = ({
 
   const earth = React.createElement("link", {
     rel: "preload",
-    href: "/bump.png",
+    href: "/bump.jpg",
     as: "image",
-    crossOrigin: "use-credentials",
-    key: "Earth",
+    crossOrigin: "anonymous",
+    key: "Earth"
   });
 
   setHeadComponents([link, earth]);

@@ -21,7 +21,7 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className 
                         <div>
                             <StaticImage src={"../../images/Headshot.png"} className="rounded-full" width={82} alt={"Headshot of Me"} />
                         </div>
-                        <Heading variant={"display"} className="whitespace-pre-wrap lg:min-w-[350px]">
+                        <Heading variant={"display"} className="max-sm:text-3xl whitespace-pre-wrap lg:min-w-[350px]">
                             {myStory.blurb}
                         </Heading>
                     </div>
@@ -30,8 +30,8 @@ export const MyStoryDialogContent: FC<MyStoryDialogContentProps> = ({ className 
                     </FakeLink> */}
                 </div>
                 <div className="xl:flex xl:gap-6">
-                    <div className="w-full flex flex-col gap-1 mt-4">
-                        <Heading variant={"small"}>
+                    <div className="w-full flex flex-col gap-1 sm:mt-4">
+                        <Heading variant={"small"} className="max-sm:hidden">
                             {myStory.title}
                         </Heading>
                         <div>

@@ -305,23 +305,21 @@ const EarthPointCloud: FC<EarthPointCloudProps> = ({ setLoaded }) => {
 
   // Return view, these are regular three.js elements expressed in JSX
   return (
-    <>
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            ref={bufferRef}
-            attach={"attributes-position"}
-            {...positions}
-          />
-          <bufferAttribute attach={"attributes-color"} {...colors} />{" "}
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.01}
-          // threshold={0.1}
-          vertexColors={true}
+    <points>
+      <bufferGeometry>
+        <bufferAttribute
+          ref={bufferRef}
+          attach={"attributes-position"}
+          {...positions}
         />
-      </points>
-    </>
+        <bufferAttribute attach={"attributes-color"} {...colors} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.01}
+        // threshold={0.1}
+        vertexColors={true}
+      />
+    </points>
   );
 };
 
@@ -331,10 +329,12 @@ type EarthAnimationProps = {
 
 export const EarthAnimation: FC<EarthAnimationProps> = ({ setLoaded }) => {
   return (
-    <Canvas className="w-screen overflow-hidden" style={{ height: "200vh" }}>
-      <Suspense fallback={null}>
-        <EarthPointCloud setLoaded={setLoaded} />
-      </Suspense>
-    </Canvas>
+    <div className="h-screen overflow-hidden">  
+      <Canvas className="w-screen overflow-hidden" style={{ height: "200vh" }}>
+        <Suspense fallback={null}>
+          <EarthPointCloud setLoaded={setLoaded} />
+        </Suspense>
+      </Canvas>
+    </div>
   );
 };

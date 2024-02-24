@@ -85,7 +85,7 @@ export const PAGE_DATA: PageData = {
         "I designed and built this robot for Simply Coffee Ltd to end-to-end pack and fulfill orders. The robot is capable of case erecting, product picking and packing, and case sealing and palletising. It uses a UR-10e Collaborative Robot, Python for orchestration, and Universal Robots proprietary language URScript.",
       url: "#robot-video",
       thumbnail: "cc2u-robot",
-      tags: ["Robotics", "Automation"],
+      tags: ["Robotics", "Python"],
       linkText: "Watch Video",
     },
     {
