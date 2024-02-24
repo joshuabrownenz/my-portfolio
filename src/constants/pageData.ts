@@ -9,12 +9,12 @@ export const PAGE_DATA: PageData = {
     blurb: "I build fast, powerful and interesting software",
     title: "I'm a Software Engineer based in Auckland, New Zealand.",
     column1: [
-      "My passion for software started when I was intermediate. It started simple with small python project then embedded projects on Arduino and custom circuit boards. After a while I moved to C# with Unity and that is where I realised anything is possible with code.",
-      "After graduating High School a year early. I was hired that summer by Simply Coffee Ltd where I was meant to work for a couple of weeks on their new robotics project.",
+      "My passion for software started when I was young. My highschool life was spent building 3D printers, drones and building games in Unity. That is I where I discovered anything is possible with code.",
+      "My programming knowledge is self-taught through projects, experiments and online courses. Supplemented with my Software Engineering Degree I am undertaking at the University of Auckland.",
     ],
     column2: [
-      "I must have done something right cause I'm still here 3 years later. Working with Simply Coffee Ltd has given me so many opportunities to explore different aspects of software.",
-      "I've built integrations with every type of hardware imaginable. The Robot (UR-10e), custom handwriting machines, camera's galore, pneumatic systems, actuators, motors and every sensor imaginable. It was the highlight of my career, the amount of learning tinkering and problem solving was incredible!",
+      "After completing NCEA level 3 a year early. I was hired by Simply Coffee Ltd to automate their order fufillment system. Cam, the owner, gave me the space to experiment, tinker and solve a diverse set of engineering challenges.",
+      "In my free time I love adventuring, tramping, mountaineering, scuba diving and surfing. Being outdoors and setting myself personal challenges make me feel alive. Spending time with friends and family is a must.",
     ],
   },
   socialLinks: [
