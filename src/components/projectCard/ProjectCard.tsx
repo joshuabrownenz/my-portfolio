@@ -25,24 +25,24 @@ type ProjectImageProps = Omit<IStaticImageProps, "src" | "width"> & {
 const ProjectStaticImage: FC<ProjectImageProps> = ({ type, ...props }) => {
   switch (type) {
     case "cc2u-website":
-      return <StaticImage src="../../images/CC2U-website.png" className="w-full rounded-3xl" width={544} alt="Simply Coffee Ltd Website" />
+      return <StaticImage src="../../images/CC2U-website.png" className="w-full rounded-3xl" alt="Simply Coffee Ltd Website" />
     case "cc2u-robot":
       return <div className="relative">
-        <StaticImage src="../../images/CC2U-robot.png" className="w-full rounded-3xl" width={544} alt="Robot in our Factory" />
+        <StaticImage src="../../images/CC2U-robot.png" className="w-full rounded-3xl" alt="Robot in our Factory" />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <PlayButton />
         </div>
       </div>
     case "rust-db":
-      return <StaticImage src="../../images/Rust.png" className="bg-white w-full rounded-3xl" width={544} alt="Rust Logo" />
+      return <StaticImage src="../../images/Rust.png" className="bg-white w-full rounded-3xl" alt="Rust Logo" />
   }
 
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
-    <a href={project.url} target={project.thumbnail !== "cc2u-robot" ? "_blank" : undefined}>
-      <Card className="max-w-[544px] h-full flex flex-col justify-between">
+    <a className="flex-grow basis-0" href={project.url} target={project.thumbnail !== "cc2u-robot" ? "_blank" : undefined}>
+      <Card className="h-full flex flex-col justify-between">
         <div>
           <ProjectStaticImage type={project.thumbnail} alt={project.title} />
           <CardHeader className="w-full">

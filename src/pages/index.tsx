@@ -9,6 +9,7 @@ import { MyStoryDialogContent } from "@/components/myStoryDialogContent/MyStoryD
 import { PageProps, navigate } from "gatsby";
 import { CC2URobotVideoAnchorElement, CC2URobotVideoAnchorElementHead } from "@/components/wistaVideo/CC2URobot";
 import { ExperienceDialogContent } from "@/components/experienceDialogContent/ExperienceDialogContent";
+import { LabelContainerMobile } from "@/components/label/LabelContainerMobile";
 
 declare global {
     interface Window {
@@ -83,7 +84,7 @@ export const Index: React.FC<PageProps> = ({ location }) => {
     }
 
     return (
-        <div className={cn("w-full min-h-screen max-h-screen")}>
+        <div className={cn("w-full h-screen")}>
             <Header />
             <main className={`relative w-screen h-screen ${!loaded ? "bg-black/100" : ""}`}>
                 <Dialog open={dialogOpen} onOpenChange={handleOnOpenChange}>
@@ -93,16 +94,25 @@ export const Index: React.FC<PageProps> = ({ location }) => {
                         <ExperienceDialogContent className={activeTab !== "experience" ? "hidden" : ""} />
                     </DialogContent>
                 </Dialog>
+                <div
+                    style={{ top: "calc((65vh + 150px)/2)" }}
+                    className="absolute z-50 flex flex-col gap-6 items-center justify-center left-1/2 -translate-x-1/2 -translate-y-1/2 sm:hidden">
+                    <LabelContainerMobile text="Projects" href="/#projects" />
+                    <LabelContainerMobile text="My Story" href="/#my-story" />
+                    <LabelContainerMobile text="Experience" href="/#experience" />
+                </div>
                 {loaded &&
-                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
-                        <div className={`absolute ${raisedLink === "projects" ? "z-50" : "z-40"}`} style={{ left: "15%", top: "65%" }}>
-                            <LabelContainer angle="left45" text="Projects" textUnderlineLength={100} active={hoveredLinkOne} setActive={setHoveredLinkOne} href="/#projects" />
-                        </div>
-                        <div className={`absolute ${raisedLink === "my-story" ? "z-50" : "z-40"}`} style={{ top: "20%", left: "50%" }}>
-                            <LabelContainer angle="up" text="My Story" lengthAt800={110} active={hoveredLinkTwo} setActive={setHoveredLinkTwo} href="/#my-story" />
-                        </div>
-                        <div className={`absolute ${raisedLink === "experience" ? "z-50" : "z-40"}`} style={{ top: "50%", right: "10%" }}>
-                            <LabelContainer angle="right45" text="Experience" lengthAt800={90} textUnderlineLength={130} active={hoveredLinkThree} setActive={setHoveredLinkThree} href="/#experience" />
+                    <div className="hidden sm:block">
+                        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, marginLeft: "auto", marginRight: "auto", width: "min(120vh, calc(100vw - 300px)) ", height: "60vh" }}>
+                            <div className={`absolute ${raisedLink === "projects" ? "z-50" : "z-40"}`} style={{ left: "15%", top: "65%" }}>
+                                <LabelContainer angle="left45" text="Projects" textUnderlineLength={100} active={hoveredLinkOne} setActive={setHoveredLinkOne} href="/#projects" />
+                            </div>
+                            <div className={`absolute ${raisedLink === "my-story" ? "z-50" : "z-40"}`} style={{ top: "20%", left: "50%" }}>
+                                <LabelContainer angle="up" text="My Story" lengthAt800={110} active={hoveredLinkTwo} setActive={setHoveredLinkTwo} href="/#my-story" />
+                            </div>
+                            <div className={`absolute ${raisedLink === "experience" ? "z-50" : "z-40"}`} style={{ top: "50%", right: "10%" }}>
+                                <LabelContainer angle="right45" text="Experience" lengthAt800={90} textUnderlineLength={130} active={hoveredLinkThree} setActive={setHoveredLinkThree} href="/#experience" />
+                            </div>
                         </div>
                     </div>
                 }
@@ -118,6 +128,8 @@ export const Index: React.FC<PageProps> = ({ location }) => {
 export function Head() {
     return (
         <>
+            <meta name="viewport" content="width=device-width"/>
+            <meta name="viewport" content="initial-scale=1.0"/>
             <title>Joshua Browne</title>
             <meta name="description" content="Joshua Browne's personal website" />
             <meta name="keywords" content="Joshua Browne, Josh Browne, Software Engineer, Developer, Web Developer, Full Stack Developer, Rust" />
