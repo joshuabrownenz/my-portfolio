@@ -22,7 +22,7 @@ const PARTICLE_COUNT = 100000;
 
 /** Computes the scale and offsets at a given screen size */
 const getScaleAndOffset = (size: Size) => {
-  const scale = size.width < 600 ? 1.25 : 2;
+  const scale = size.width < 640 ? 1.25 : 2;
 
   const yOffset = 0
   const offset = new Vector3(0, yOffset, 0);

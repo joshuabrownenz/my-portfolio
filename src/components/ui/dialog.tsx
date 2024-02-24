@@ -36,13 +36,17 @@ const DialogContent = React.forwardRef<
     <DialogOverlay />
     <DialogPrimitive.Content
       id="dialog-content"
+      tabIndex={-1}
       ref={ref}
       style={{
         animationDuration: "0.5s"
       }
       }
       className={cn(
+
         "top-12 min-h-96 z-50 grid gap-8 py-7 2xl:px-14 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:data-[state=closed]:slide-out-to-left-1/2 sm:data-[state=closed]:slide-out-to-top-[48%] sm:data-[state=open]:slide-in-from-left-1/2 sm:data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        "max-sm:pb-[80px]", // Average solution to prevent the content from being hidden by the mobile search bar,
+        "focus-visible:outline-none",
         className
       )}
       onOpenAutoFocus={e => e.preventDefault()}
