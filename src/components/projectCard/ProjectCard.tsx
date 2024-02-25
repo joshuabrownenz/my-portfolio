@@ -47,7 +47,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           <ProjectStaticImage type={project.thumbnail} alt={project.title} />
           <CardHeader className="w-full">
             <CardTitle>{project.title}</CardTitle>
-            <CardDescription className="lg:text-xs xl:text-xs 2xl:text-sm">{project.description}</CardDescription>
+            <CardDescription className="lg:text-xs xl:text-sm 2xl:text-sm">{project.description}</CardDescription>
           </CardHeader>
         </div>
         <CardFooter className="flex justify-between">
