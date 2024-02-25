@@ -57,15 +57,15 @@ export const PAGE_DATA: PageData = {
         timeline: "2020 - Ongoing",
       },
       {
-        company: "DDSIT",
+        company: "DDS IT",
         role: "SRE Engineer (Intern)",
-        body: "I worked part-time for DDSIT under an incredibly talented team. I was mainly responsible for helping DDSIT achieve their certification, education and training goals. In my time there DDSIT reached their Microsoft solution partner status.  ",
+        body: "I worked part-time for DDS IT under an incredibly talented team. I was mainly responsible for helping DDS IT achieve their certification, education and training goals. In my time there DDS IT reached their Microsoft solution partner status.",
         timeline: "Feb 2023 - Jul 2023",
       },
       {
         company: "Woop Ltd",
         role: "Software Engineer",
-        body: "I'm also a freelance developer, working with a variety of clients to build websites and web applications.",
+        body: "I am working with Woop to develop a new Central Operations System. Working with a Senior Developer, we are automating and simplifying the process of procuring products, communicating with suppliers, managing inventory and providing actionable insights into their business.",
         timeline: "Dec 2023 - Ongoing",
       },
     ],
