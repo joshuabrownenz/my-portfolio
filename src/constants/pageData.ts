@@ -31,12 +31,6 @@ export const PAGE_DATA: PageData = {
       icon: FaLinkedin,
     },
     {
-      url: "https://www.instagram.com/joshuabrownenz",
-      title: "Instagram",
-      ariaLabel: "Instagram (opens in a new tab)",
-      icon: FaInstagram,
-    },
-    {
       url: "https://www.credly.com/users/joshuabrownenz/badges",
       title: "Credly",
       ariaLabel: "Credly (opens in a new tab)",
